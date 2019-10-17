@@ -23,27 +23,28 @@ APT_BaseBike::APT_BaseBike()
 
 	// Init components
 
-	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-
-	check(CollisionBox != nullptr);
-	RootComponent = CollisionBox;
-	CollisionBox->SetBoxExtent(FVector(100, 50, 50));
-	CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
-
 	TrailingComponent = CreateDefaultSubobject<UPT_TrailingComponent>(TEXT("TrailingComponent"));
 
 	check(TrailingComponent != nullptr);
-	TrailingComponent->SetupAttachment(RootComponent);
-	TrailingComponent->SetRelativeLocation(-BikeMeshOffset);
+	RootComponent = TrailingComponent;
 	TrailingComponent->bEditableWhenInherited = true;
+
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
+
+	check(CollisionBox != nullptr);
+	CollisionBox->SetupAttachment(RootComponent);
+	CollisionBox->SetBoxExtent(FVector(100, 50, 50));
+	CollisionBox->SetRelativeLocation(BikeMeshOffset);
+	CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	
 	check(MeshComponent != nullptr);
 	MeshComponent->bEditableWhenInherited = true;
 	MeshComponent->SetupAttachment(RootComponent);
+	MeshComponent->SetRelativeLocation(BikeMeshOffset);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BikeMesh(TEXT("/Game/Geometry/Meshes/Sphere.Sphere"));
 	if (BikeMesh.Succeeded())
 	{
