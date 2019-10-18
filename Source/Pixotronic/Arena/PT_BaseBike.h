@@ -44,6 +44,7 @@ public:
 protected:
 	static const FName TurnLeftBinding;
 	static const FName TurnRightBinding;
+	static const FName UseAbilityBinding;
 
 	static const FVector BikeMeshOffset;
 

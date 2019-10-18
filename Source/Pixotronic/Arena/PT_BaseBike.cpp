@@ -12,6 +12,7 @@
 
 const FName APT_BaseBike::TurnLeftBinding("TurnLeft");
 const FName APT_BaseBike::TurnRightBinding("TurnRight");
+const FName APT_BaseBike::UseAbilityBinding("SpecialAbility");
 
 const FVector APT_BaseBike::BikeMeshOffset(100.0f, 0.0f, 0.0f);
 
