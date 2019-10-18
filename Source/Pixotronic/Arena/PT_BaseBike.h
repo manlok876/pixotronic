@@ -41,12 +41,12 @@ public:
 				   AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 				   int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+protected:
 	static const FName TurnLeftBinding;
 	static const FName TurnRightBinding;
 
 	static const FVector BikeMeshOffset;
 
-protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
