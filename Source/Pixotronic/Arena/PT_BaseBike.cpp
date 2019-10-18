@@ -80,7 +80,7 @@ void APT_BaseBike::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (HasAuthority()) {
-		AddActorLocalOffset(FVector(1, 0, 0) * Speed * DeltaTime);
+		AddActorWorldOffset(GetActorForwardVector() * Speed * DeltaTime);
 	}
 }
 
