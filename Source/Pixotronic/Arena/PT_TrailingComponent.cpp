@@ -19,7 +19,7 @@ UPT_TrailingComponent::UPT_TrailingComponent()
 	CurrentInstance = -1;
 
 	// TODO: create material
-	static ConstructorHelpers::FObjectFinder<UMaterial> TrailMaterial(TEXT("/Game/Geometry/Meshes/Sphere.Sphere"));
+	static ConstructorHelpers::FObjectFinder<UMaterial> TrailMaterial(TEXT("/Game/Assets/Materials/TrailMaterial.TrailMaterial"));
 	if (TrailMaterial.Succeeded())
 	{
 		SetMaterial(0, TrailMaterial.Object);
