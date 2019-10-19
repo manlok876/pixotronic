@@ -19,8 +19,9 @@ const FVector APT_BaseBike::BikeMeshOffset(120.0f, 0.0f, 0.0f);
 APT_BaseBike::APT_BaseBike()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	bReplicates = true;
 	bAlwaysRelevant = true;
+	SetReplicates(true);
+	SetReplicateMovement(true);
 
 	// Init components
 
