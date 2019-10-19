@@ -112,7 +112,12 @@ void APT_BaseBike::OnCollide(UPrimitiveComponent* OverlappedComponent,
 							 AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 							 int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Destroy();
+	MeshComponent->SetHiddenInGame(true);
+
+	CollisionBox->SetHiddenInGame(true);
+	CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	SetActorTickEnabled(false);
 }
 
 void APT_BaseBike::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
