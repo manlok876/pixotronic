@@ -38,7 +38,6 @@ APT_BaseBike::APT_BaseBike()
 	CollisionBox->SetRelativeLocation(BikeMeshOffset);
 	CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	
@@ -73,7 +72,7 @@ void APT_BaseBike::OnConstruction(const FTransform& Transform)
 void APT_BaseBike::BeginPlay()
 {
 	Super::BeginPlay();
-
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
 }
 
 void APT_BaseBike::Tick(float DeltaTime)
