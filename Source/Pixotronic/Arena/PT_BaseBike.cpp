@@ -14,7 +14,7 @@ const FName APT_BaseBike::TurnLeftBinding("TurnLeft");
 const FName APT_BaseBike::TurnRightBinding("TurnRight");
 const FName APT_BaseBike::UseAbilityBinding("SpecialAbility");
 
-const FVector APT_BaseBike::BikeMeshOffset(100.0f, 0.0f, 0.0f);
+const FVector APT_BaseBike::BikeMeshOffset(120.0f, 0.0f, 0.0f);
 
 APT_BaseBike::APT_BaseBike()
 {
@@ -24,10 +24,12 @@ APT_BaseBike::APT_BaseBike()
 
 	// Init components
 
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	check(RootComponent != nullptr);
+	
 	TrailingComponent = CreateDefaultSubobject<UPT_TrailingComponent>(TEXT("TrailingComponent"));
 
 	check(TrailingComponent != nullptr);
-	RootComponent = TrailingComponent;
 	TrailingComponent->bEditableWhenInherited = true;
 
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
@@ -49,6 +51,11 @@ APT_BaseBike::APT_BaseBike()
 	if (BikeMesh.Succeeded())
 	{
 		MeshComponent->SetStaticMesh(BikeMesh.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> BikeMaterial(TEXT("/Game/Assets/Materials/BikeMaterial.BikeMaterial")); 
+	if (BikeMesh.Succeeded())
+	{
+		MeshComponent->SetMaterial(0, BikeMaterial.Object);
 	}
 	MeshComponent->SetRelativeScale3D(FVector(2.0f, 1.0f, 1.0f));
 	MeshComponent->SetSimulatePhysics(false);

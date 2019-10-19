@@ -8,7 +8,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 
 
-const FName UPT_TrailingComponent::ColorParameterName("BaseColor");
+const FName UPT_TrailingComponent::ColorParameterName("Color");
 
 UPT_TrailingComponent::UPT_TrailingComponent()
 {
@@ -18,7 +18,7 @@ UPT_TrailingComponent::UPT_TrailingComponent()
 	TrailHeight = 100.0f;
 	TrailStartOffset = FVector(0.0f);
 
-	Color = FColor(255, 255, 255);
+	Color = FColor(255, 255, 255, 255);
 
 	bIsTrailingEnabled = false;
 	CurrentInstance = -1;
@@ -66,7 +66,9 @@ FTransform UPT_TrailingComponent::CalcNewSegmentTransform()
 	FVector LastTurnPoint = TurnPoints[TurnPoints.Num() - 1];
 	FVector NewLocation = (LastTurnPoint + GetTrailStartLocation()) / 2.0f;
 	FRotator NewRotation = UKismetMathLibrary::MakeRotFromX(NewLocation - LastTurnPoint);
-	FVector NewScale = FVector(FVector::Distance(GetTrailStartLocation(), LastTurnPoint), TrailWidth, TrailHeight) / 100.0f;
+	FVector NewScale = 
+		FVector(
+			FVector::Distance(GetTrailStartLocation(), LastTurnPoint) + TrailWidth, TrailWidth, TrailHeight) / 100.0f;
 	return FTransform(NewRotation, NewLocation, NewScale);
 }
 
