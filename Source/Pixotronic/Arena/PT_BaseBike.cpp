@@ -46,7 +46,7 @@ APT_BaseBike::APT_BaseBike()
 	MeshComponent->bEditableWhenInherited = true;
 	MeshComponent->SetupAttachment(RootComponent);
 	MeshComponent->SetRelativeLocation(BikeMeshOffset);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BikeMesh(TEXT("/Game/Geometry/Meshes/Sphere.Sphere"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> BikeMesh(TEXT("/Game/Assets/Meshes/Sphere.Sphere"));
 	if (BikeMesh.Succeeded())
 	{
 		MeshComponent->SetStaticMesh(BikeMesh.Object);
