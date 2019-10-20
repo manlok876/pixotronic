@@ -3,11 +3,14 @@
 
 #include "PT_ArenaGameState.h"
 
-#include "Net/UnrealNetwork.h"
-
-void APT_ArenaGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+TArray<int> APT_ArenaGameState::GetScores() const
 {
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	TArray<int> Scores;
 
-	DOREPLIFETIME(APT_ArenaGameState, CameraRef);
+	for (auto PlayerState : PlayerArray)
+	{
+
+	}
+
+	return Scores;
 }

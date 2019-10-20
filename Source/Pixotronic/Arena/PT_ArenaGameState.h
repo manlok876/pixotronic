@@ -15,8 +15,7 @@ class PIXOTRONIC_API APT_ArenaGameState : public AGameState
 	GENERATED_BODY()
 
 public:
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
-	AActor* CameraRef;
+	UFUNCTION(BlueprintPure)
+	TArray<int> GetScores() const;
 };
