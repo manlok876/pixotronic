@@ -32,6 +32,9 @@ public:
 
 	bool HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers);
 
+	UFUNCTION(BlueprintCallable, Category = "Network|Test")
+	void StartOnlineGame();
+
 	// Finding a session
 
 	TSharedPtr<class FOnlineSessionSearch> SessionSearch;
@@ -42,11 +45,17 @@ public:
 
 	void FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence);
 
+	UFUNCTION(BlueprintCallable, Category = "Network|Test")
+	void FindOnlineGames();
+
 	// Destroying session
 
 	FOnDestroySessionCompleteDelegate OnDestroySessionCompleteDelegate;
 	FDelegateHandle OnDestroySessionCompleteDelegateHandle;
 	virtual void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+
+	UFUNCTION(BlueprintCallable, Category = "Network|Test")
+	void DestroySessionAndLeave();
 
 private:
 	static const FName ArenaMapName;

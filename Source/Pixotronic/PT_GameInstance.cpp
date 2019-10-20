@@ -24,6 +24,12 @@ UPT_GameInstance::UPT_GameInstance()
 		FOnDestroySessionCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnDestroySessionComplete);
 }
 
+void UPT_GameInstance::StartOnlineGame()
+{
+	ULocalPlayer* const Player = GetFirstGamePlayer();
+	HostSession(Player->GetPreferredUniqueNetId().GetUniqueNetId(), GameSessionName, true, true, 4);
+}
+
 bool UPT_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers)
 {
 	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
@@ -88,10 +94,10 @@ void UPT_GameInstance::OnStartSessionComplete(FName SessionName, bool bWasSucces
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid())
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
+		if (SessionInterface.IsValid())
 		{
-			Sessions->ClearOnStartSessionCompleteDelegate_Handle(OnStartSessionCompleteDelegateHandle);
+			SessionInterface->ClearOnStartSessionCompleteDelegate_Handle(OnStartSessionCompleteDelegateHandle);
 		}
 	}
 
@@ -101,14 +107,20 @@ void UPT_GameInstance::OnStartSessionComplete(FName SessionName, bool bWasSucces
 	}
 }
 
+void UPT_GameInstance::FindOnlineGames()
+{
+	ULocalPlayer* const Player = GetFirstGamePlayer();
+	FindSessions(Player->GetPreferredUniqueNetId().GetUniqueNetId(), true, true);
+}
+
 void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence)
 {
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
 
-		if (Sessions.IsValid() && UserId.IsValid())
+		if (SessionInterface.IsValid() && UserId.IsValid())
 		{
 			SessionSearch = MakeShareable(new FOnlineSessionSearch());
 
@@ -123,9 +135,9 @@ void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool 
 
 			TSharedRef<FOnlineSessionSearch> SearchSettingsRef = SessionSearch.ToSharedRef();
 
-			OnFindSessionsCompleteDelegateHandle = Sessions->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
+			OnFindSessionsCompleteDelegateHandle = SessionInterface->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
 
-			Sessions->FindSessions(*UserId, SearchSettingsRef);
+			SessionInterface->FindSessions(*UserId, SearchSettingsRef);
 		}
 	}
 	else
@@ -139,10 +151,10 @@ void UPT_GameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid())
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
+		if (SessionInterface.IsValid())
 		{
-			Sessions->ClearOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegateHandle);
+			SessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegateHandle);
 
 			if (SessionSearch->SearchResults.Num() > 0)
 			{
@@ -161,15 +173,30 @@ void UPT_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSucc
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid())
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
+		if (SessionInterface.IsValid())
 		{
-			Sessions->ClearOnDestroySessionCompleteDelegate_Handle(OnDestroySessionCompleteDelegateHandle);
+			SessionInterface->ClearOnDestroySessionCompleteDelegate_Handle(OnDestroySessionCompleteDelegateHandle);
 
 			if (bWasSuccessful)
 			{
 				UGameplayStatics::OpenLevel(this, "PT_StartupMap", true);
 			}
+		}
+	}
+}
+
+void UPT_GameInstance::DestroySessionAndLeave()
+{
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
+		if (SessionInterface.IsValid())
+		{
+			SessionInterface->AddOnDestroySessionCompleteDelegate_Handle(OnDestroySessionCompleteDelegate);
+
+			SessionInterface->DestroySession(GameSessionName);
 		}
 	}
 }
