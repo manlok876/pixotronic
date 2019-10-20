@@ -42,6 +42,12 @@ public:
 
 	void FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence);
 
+	// Destroying session
+
+	FOnDestroySessionCompleteDelegate OnDestroySessionCompleteDelegate;
+	FDelegateHandle OnDestroySessionCompleteDelegateHandle;
+	virtual void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+
 private:
 	static const FName ArenaMapName;
 };

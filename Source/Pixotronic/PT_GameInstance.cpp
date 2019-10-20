@@ -19,6 +19,9 @@ UPT_GameInstance::UPT_GameInstance()
 
 	OnFindSessionsCompleteDelegate = 
 		FOnFindSessionsCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnFindSessionsComplete);
+
+	OnDestroySessionCompleteDelegate =
+		FOnDestroySessionCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnDestroySessionComplete);
 }
 
 bool UPT_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers)
@@ -148,6 +151,24 @@ void UPT_GameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 					UE_LOG(LogTemp, Display, TEXT("Session Number: %d | Sessionname: %s "), 
 						SearchIdx + 1, *(SessionSearch->SearchResults[SearchIdx].Session.OwningUserName));
 				}
+			}
+		}
+	}
+}
+
+void UPT_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
+		if (Sessions.IsValid())
+		{
+			Sessions->ClearOnDestroySessionCompleteDelegate_Handle(OnDestroySessionCompleteDelegateHandle);
+
+			if (bWasSuccessful)
+			{
+				UGameplayStatics::OpenLevel(this, "PT_StartupMap", true);
 			}
 		}
 	}
