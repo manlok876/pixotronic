@@ -16,6 +16,9 @@ UPT_GameInstance::UPT_GameInstance()
 
 	OnStartSessionCompleteDelegate =
 		FOnStartSessionCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnStartSessionComplete);
+
+	OnFindSessionsCompleteDelegate = 
+		FOnFindSessionsCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnFindSessionsComplete);
 }
 
 bool UPT_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers)
@@ -92,5 +95,60 @@ void UPT_GameInstance::OnStartSessionComplete(FName SessionName, bool bWasSucces
 	if (bWasSuccessful)
 	{
 		UGameplayStatics::OpenLevel(this, ArenaMapName, true, "listen");
+	}
+}
+
+void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence)
+{
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
+
+		if (Sessions.IsValid() && UserId.IsValid())
+		{
+			SessionSearch = MakeShareable(new FOnlineSessionSearch());
+
+			SessionSearch->bIsLanQuery = bIsLAN;
+			SessionSearch->MaxSearchResults = 20;
+			SessionSearch->PingBucketSize = 50;
+
+			if (bIsPresence)
+			{
+				SessionSearch->QuerySettings.Set(SEARCH_PRESENCE, bIsPresence, EOnlineComparisonOp::Equals);
+			}
+
+			TSharedRef<FOnlineSessionSearch> SearchSettingsRef = SessionSearch.ToSharedRef();
+
+			OnFindSessionsCompleteDelegateHandle = Sessions->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
+
+			Sessions->FindSessions(*UserId, SearchSettingsRef);
+		}
+	}
+	else
+	{
+		OnFindSessionsComplete(false);
+	}
+}
+
+void UPT_GameInstance::OnFindSessionsComplete(bool bWasSuccessful)
+{
+	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
+		if (Sessions.IsValid())
+		{
+			Sessions->ClearOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegateHandle);
+
+			if (SessionSearch->SearchResults.Num() > 0)
+			{
+				for (int32 SearchIdx = 0; SearchIdx < SessionSearch->SearchResults.Num(); ++SearchIdx)
+				{
+					UE_LOG(LogTemp, Display, TEXT("Session Number: %d | Sessionname: %s ", 
+						SearchIdx + 1, *(SessionSearch->SearchResults[SearchIdx].Session.OwningUserName)));
+				}
+			}
+		}
 	}
 }

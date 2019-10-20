@@ -20,6 +20,8 @@ public:
 
 	TSharedPtr<class FOnlineSessionSettings> SessionSettings;
 
+	// Hosting a session
+
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
 	FDelegateHandle OnCreateSessionCompleteDelegateHandle;
 	virtual void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
@@ -29,6 +31,16 @@ public:
 	void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 
 	bool HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers);
+
+	// Finding a session
+
+	TSharedPtr<class FOnlineSessionSearch> SessionSearch;
+
+	FOnFindSessionsCompleteDelegate OnFindSessionsCompleteDelegate;
+	FDelegateHandle OnFindSessionsCompleteDelegateHandle;
+	void OnFindSessionsComplete(bool bWasSuccessful);
+
+	void FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence);
 
 private:
 	static const FName ArenaMapName;
