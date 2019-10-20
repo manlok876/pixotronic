@@ -17,6 +17,14 @@ class PIXOTRONIC_API APT_ArenaPlayerController : public APlayerController
 public:
 	APT_ArenaPlayerController();
 
+	virtual void SetupInputComponent() override;
+
+	UFUNCTION()
+	void LeaveGame();
+
 protected:
 	virtual void BeginPlay() override;
+
+private:
+	static const FName ReturnBinding;
 };
