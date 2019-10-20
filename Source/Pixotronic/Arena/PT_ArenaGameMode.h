@@ -17,4 +17,5 @@ class PIXOTRONIC_API APT_ArenaGameMode : public AGameMode
 public:
 	APT_ArenaGameMode();
 
+	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 };
