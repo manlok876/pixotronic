@@ -43,7 +43,7 @@ bool UPT_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName 
 			SessionSettings->bAllowJoinViaPresence = true;
 			SessionSettings->bAllowJoinViaPresenceFriendsOnly = false;
 
-			SessionSettings->Set(SETTING_MAPNAME, ArenaMapName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+			SessionSettings->Set(SETTING_MAPNAME, ArenaMapName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 			OnCreateSessionCompleteDelegateHandle =
 				SessionInterface->AddOnCreateSessionCompleteDelegate_Handle(OnCreateSessionCompleteDelegate);
@@ -145,8 +145,8 @@ void UPT_GameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 			{
 				for (int32 SearchIdx = 0; SearchIdx < SessionSearch->SearchResults.Num(); ++SearchIdx)
 				{
-					UE_LOG(LogTemp, Display, TEXT("Session Number: %d | Sessionname: %s ", 
-						SearchIdx + 1, *(SessionSearch->SearchResults[SearchIdx].Session.OwningUserName)));
+					UE_LOG(LogTemp, Display, TEXT("Session Number: %d | Sessionname: %s "), 
+						SearchIdx + 1, *(SessionSearch->SearchResults[SearchIdx].Session.OwningUserName));
 				}
 			}
 		}
