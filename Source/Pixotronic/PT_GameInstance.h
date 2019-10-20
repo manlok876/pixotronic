@@ -4,6 +4,7 @@
 
 #include "Core.h"
 #include "Engine/GameInstance.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "PT_GameInstance.generated.h"
 
 /**
@@ -14,4 +15,21 @@ class PIXOTRONIC_API UPT_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+public:
+	UPT_GameInstance();
+
+	TSharedPtr<class FOnlineSessionSettings> SessionSettings;
+
+	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
+	FDelegateHandle OnCreateSessionCompleteDelegateHandle;
+	virtual void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+
+	FOnStartSessionCompleteDelegate OnStartSessionCompleteDelegate;
+	FDelegateHandle OnStartSessionCompleteDelegateHandle;
+	void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
+
+	bool HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers);
+
+private:
+	static const FName ArenaMapName;
 };
