@@ -14,8 +14,4 @@ class PIXOTRONIC_API APT_ArenaGameState : public AGameState
 {
 	GENERATED_BODY()
 
-public:
-
-	UFUNCTION(BlueprintPure)
-	TArray<int> GetScores() const;
 };
