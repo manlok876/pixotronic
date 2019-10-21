@@ -135,7 +135,8 @@ void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool 
 
 			TSharedRef<FOnlineSessionSearch> SearchSettingsRef = SessionSearch.ToSharedRef();
 
-			OnFindSessionsCompleteDelegateHandle = SessionInterface->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
+			OnFindSessionsCompleteDelegateHandle = 
+				SessionInterface->AddOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegate);
 
 			SessionInterface->FindSessions(*UserId, SearchSettingsRef);
 		}
