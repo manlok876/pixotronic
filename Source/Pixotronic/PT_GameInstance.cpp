@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 
 const FName UPT_GameInstance::ArenaMapName("PT_Arena");
+const FName UPT_GameInstance::StartupMapName("PT_StartupMap");
 
 UPT_GameInstance::UPT_GameInstance()
 {
@@ -19,6 +20,9 @@ UPT_GameInstance::UPT_GameInstance()
 
 	OnFindSessionsCompleteDelegate = 
 		FOnFindSessionsCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnFindSessionsComplete);
+
+	OnJoinSessionCompleteDelegate = 
+		FOnJoinSessionCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnJoinSessionComplete);
 
 	OnDestroySessionCompleteDelegate =
 		FOnDestroySessionCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnDestroySessionComplete);
@@ -47,7 +51,7 @@ bool UPT_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName 
 			SessionSettings->NumPublicConnections = MaxNumPlayers;
 			SessionSettings->NumPrivateConnections = 0;
 			SessionSettings->bAllowInvites = true;
-			SessionSettings->bAllowJoinInProgress = false;
+			SessionSettings->bAllowJoinInProgress = true;
 			SessionSettings->bShouldAdvertise = true;
 			SessionSettings->bAllowJoinViaPresence = true;
 			SessionSettings->bAllowJoinViaPresenceFriendsOnly = false;
@@ -107,10 +111,10 @@ void UPT_GameInstance::OnStartSessionComplete(FName SessionName, bool bWasSucces
 	}
 }
 
-void UPT_GameInstance::FindOnlineGames()
+void UPT_GameInstance::FindOnlineSessions()
 {
 	ULocalPlayer* const Player = GetFirstGamePlayer();
-	FindSessions(Player->GetPreferredUniqueNetId().GetUniqueNetId(), true, true);
+	FindSessions(Player->GetPreferredUniqueNetId().GetUniqueNetId(), true, false);
 }
 
 void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence)
@@ -125,7 +129,7 @@ void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool 
 			SessionSearch = MakeShareable(new FOnlineSessionSearch());
 
 			SessionSearch->bIsLanQuery = bIsLAN;
-			SessionSearch->MaxSearchResults = 20;
+			SessionSearch->MaxSearchResults = 5;
 			SessionSearch->PingBucketSize = 50;
 
 			if (bIsPresence)
@@ -149,7 +153,7 @@ void UPT_GameInstance::FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool 
 
 void UPT_GameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 {
-	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
 		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
@@ -157,13 +161,78 @@ void UPT_GameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 		{
 			SessionInterface->ClearOnFindSessionsCompleteDelegate_Handle(OnFindSessionsCompleteDelegateHandle);
 
-			if (SessionSearch->SearchResults.Num() > 0)
+			BP_SearchResults.Empty();
+			if (bWasSuccessful)
 			{
-				for (int32 SearchIdx = 0; SearchIdx < SessionSearch->SearchResults.Num(); ++SearchIdx)
+				for (auto FoundSession : SessionSearch->SearchResults)
 				{
-					UE_LOG(LogTemp, Display, TEXT("Session Number: %d | Sessionname: %s "), 
-						SearchIdx + 1, *(SessionSearch->SearchResults[SearchIdx].Session.OwningUserName));
+					FBlueprintSessionResult BP_SearchResult;
+					BP_SearchResult.OnlineResult = FoundSession;
+					BP_SearchResults.Add(BP_SearchResult);
 				}
+				OnSessionSearchFinishedDelegate.Broadcast(BP_SearchResults);
+			}
+		}
+	}
+}
+
+void UPT_GameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+{
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
+		if (SessionInterface.IsValid())
+		{
+			SessionInterface->ClearOnJoinSessionCompleteDelegate_Handle(OnJoinSessionCompleteDelegateHandle);
+
+			APlayerController * const PlayerController = GetFirstLocalPlayerController();
+
+			FString TravelURL;
+
+			if (PlayerController && SessionInterface->GetResolvedConnectString(SessionName, TravelURL))
+			{
+				PlayerController->ClientTravel(TravelURL, ETravelType::TRAVEL_Absolute);
+			}
+		}
+	}
+}
+
+bool UPT_GameInstance::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FOnlineSessionSearchResult& SearchResult)
+{
+	bool bSuccessful = false;
+
+	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
+	if (OnlineSub)
+	{
+		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
+		if (SessionInterface.IsValid() && UserId.IsValid())
+		{
+			OnJoinSessionCompleteDelegateHandle = 
+				SessionInterface->AddOnJoinSessionCompleteDelegate_Handle(OnJoinSessionCompleteDelegate);
+
+			bSuccessful = SessionInterface->JoinSession(*UserId, SessionName, SearchResult);
+		}
+	}
+
+	return bSuccessful;
+}
+
+void UPT_GameInstance::JoinOnlineSession(const FBlueprintSessionResult& Session)
+{
+	ULocalPlayer* const Player = GetFirstGamePlayer();
+
+	if (SessionSearch->SearchResults.Num() > 0)
+	{
+		for (int32 i = 0; i < SessionSearch->SearchResults.Num(); i++)
+		{
+			if (SessionSearch->SearchResults[i].Session.OwningUserId != Player->GetPreferredUniqueNetId().GetUniqueNetId())
+			{
+				FOnlineSessionSearchResult SearchResult;
+				SearchResult = SessionSearch->SearchResults[i];
+
+				JoinSession(Player->GetPreferredUniqueNetId().GetUniqueNetId(), GameSessionName, SearchResult);
+				break;
 			}
 		}
 	}
@@ -181,7 +250,7 @@ void UPT_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSucc
 
 			if (bWasSuccessful)
 			{
-				UGameplayStatics::OpenLevel(this, "PT_StartupMap", true);
+				UGameplayStatics::OpenLevel(this, StartupMapName, true);
 			}
 		}
 	}

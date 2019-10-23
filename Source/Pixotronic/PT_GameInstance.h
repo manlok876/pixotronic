@@ -5,6 +5,8 @@
 #include "Core.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "CreateSessionCallbackProxy.h"
+#include "FindSessionsCallbackProxy.h"
 #include "PT_GameInstance.generated.h"
 
 /**
@@ -32,12 +34,16 @@ public:
 
 	bool HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers);
 
-	UFUNCTION(BlueprintCallable, Category = "Network|Test")
+	UFUNCTION(BlueprintCallable)
 	void StartOnlineGame();
+
+	UPROPERTY(BlueprintAssignable)
+	FEmptyOnlineDelegate OnSessionCreateFinishedDelegate;
 
 	// Finding a session
 
 	TSharedPtr<class FOnlineSessionSearch> SessionSearch;
+	TArray<FBlueprintSessionResult> BP_SearchResults;
 
 	FOnFindSessionsCompleteDelegate OnFindSessionsCompleteDelegate;
 	FDelegateHandle OnFindSessionsCompleteDelegateHandle;
@@ -45,8 +51,22 @@ public:
 
 	void FindSessions(TSharedPtr<const FUniqueNetId> UserId, bool bIsLAN, bool bIsPresence);
 
-	UFUNCTION(BlueprintCallable, Category = "Network|Test")
-	void FindOnlineGames();
+	UFUNCTION(BlueprintCallable)
+	void FindOnlineSessions();
+
+	UPROPERTY(BlueprintAssignable)
+	FBlueprintFindSessionsResultDelegate OnSessionSearchFinishedDelegate;
+
+	// Joining a session
+
+	FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
+	FDelegateHandle OnJoinSessionCompleteDelegateHandle;
+	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+
+	bool JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FOnlineSessionSearchResult& SearchResult);
+
+	UFUNCTION(BlueprintCallable)
+	void JoinOnlineSession(const FBlueprintSessionResult& Session);
 
 	// Destroying session
 
@@ -54,9 +74,10 @@ public:
 	FDelegateHandle OnDestroySessionCompleteDelegateHandle;
 	virtual void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 
-	UFUNCTION(BlueprintCallable, Category = "Network|Test")
+	UFUNCTION(BlueprintCallable)
 	void DestroySessionAndLeave();
 
 private:
 	static const FName ArenaMapName;
+	static const FName StartupMapName;
 };
