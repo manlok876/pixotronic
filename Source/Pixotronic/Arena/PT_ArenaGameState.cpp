@@ -3,3 +3,7 @@
 
 #include "PT_ArenaGameState.h"
 
+APT_ArenaGameState::APT_ArenaGameState()
+{
+
+}

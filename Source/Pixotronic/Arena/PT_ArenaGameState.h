@@ -6,6 +6,8 @@
 #include "GameFramework/GameState.h"
 #include "PT_ArenaGameState.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoundStartedDelegate);
+
 /**
  * 
  */
@@ -14,4 +16,11 @@ class PIXOTRONIC_API APT_ArenaGameState : public AGameState
 {
 	GENERATED_BODY()
 
+public:
+	APT_ArenaGameState();
+
+	FOnRoundStartedDelegate OnRoundStarted;
+
+protected:
+	int RoundNumber;
 };
