@@ -18,4 +18,21 @@ public:
 	APT_ArenaGameMode();
 
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
+	
+	virtual bool ReadyToStartMatch_Implementation() override;
+	virtual void HandleMatchHasStarted() override;
+	
+	virtual bool ReadyToEndMatch_Implementation() override;
+	virtual void HandleMatchHasEnded();
+
+	virtual void RestartMatch();
+
+	UFUNCTION(BlueprintCallable)
+	void SetMaxPlayers(int NewMaxPlayers);
+
+private:
+	int MaxPlayers;
+	
+	float RoundStartDelay;
+	FTimerHandle RoundStartTimer;
 };
