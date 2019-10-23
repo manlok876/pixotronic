@@ -30,13 +30,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FColor PlayerColor;
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable, WithValidation)
 	void TurnLeft();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable, WithValidation)
 	void TurnRight();
 
-	UFUNCTION()
+	UFUNCTION(NetMulticast, Reliable)
 	void OnCollide(UPrimitiveComponent* OverlappedComponent, 
 				   AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 				   int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -49,6 +49,9 @@ protected:
 	static const FVector BikeMeshOffset;
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void UpdateTransform(const FTransform& NewTransform);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class UStaticMeshComponent* MeshComponent;

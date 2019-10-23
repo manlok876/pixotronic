@@ -80,7 +80,15 @@ void APT_BaseBike::OnConstruction(const FTransform& Transform)
 void APT_BaseBike::BeginPlay()
 {
 	Super::BeginPlay();
-	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
+	if (HasAuthority())
+	{
+		CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
+	}
+}
+
+void APT_BaseBike::UpdateTransform_Implementation(const FTransform& NewTransform)
+{
+	SetActorTransform(NewTransform);
 }
 
 void APT_BaseBike::Tick(float DeltaTime)
@@ -88,35 +96,70 @@ void APT_BaseBike::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (HasAuthority()) {
 		AddActorWorldOffset(GetActorForwardVector() * Speed * DeltaTime);
+		UpdateTransform(GetActorTransform());
 	}
 }
 
-void APT_BaseBike::TurnLeft()
+void APT_BaseBike::TurnLeft_Implementation()
 {
-	AddActorWorldRotation(FRotator(0, -90, 0));
-	if (IsValid(TrailingComponent))
+	if (HasAuthority())
 	{
-		TrailingComponent->MakeTurnpoint();
+		AddActorWorldRotation(FRotator(0, -90, 0));
+		if (IsValid(TrailingComponent))
+		{
+			TrailingComponent->MakeTurnpoint();
+		}
+		UpdateTransform(GetActorTransform());
 	}
 }
 
-void APT_BaseBike::TurnRight()
+bool APT_BaseBike::TurnLeft_Validate()
 {
-	AddActorWorldRotation(FRotator(0, 90, 0));
-	if (IsValid(TrailingComponent))
+	return true;
+}
+
+void APT_BaseBike::TurnRight_Implementation()
+{
+	if (HasAuthority())
 	{
-		TrailingComponent->MakeTurnpoint();
+		AddActorWorldRotation(FRotator(0, 90, 0));
+		if (IsValid(TrailingComponent))
+		{
+			TrailingComponent->MakeTurnpoint();
+		}
+		UpdateTransform(GetActorTransform());
 	}
 }
 
-void APT_BaseBike::OnCollide(UPrimitiveComponent* OverlappedComponent, 
+bool APT_BaseBike::TurnRight_Validate()
+{
+	return true;
+}
+
+void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedComponent,
 							 AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 							 int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("OnCollide"));
+		if (HasAuthority())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Server"));
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Client"));
+		}
+	}
+
+	return;
 	MeshComponent->SetHiddenInGame(true);
 
 	CollisionBox->SetHiddenInGame(true);
 	CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	Speed = 0;
 
 	SetActorTickEnabled(false);
 }
