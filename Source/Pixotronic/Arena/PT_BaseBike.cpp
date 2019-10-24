@@ -105,11 +105,11 @@ void APT_BaseBike::TurnLeft_Implementation()
 	if (HasAuthority())
 	{
 		AddActorWorldRotation(FRotator(0, -90, 0));
+		UpdateTransform(GetActorTransform());
 		if (IsValid(TrailingComponent))
 		{
 			TrailingComponent->MakeTurnpoint();
 		}
-		UpdateTransform(GetActorTransform());
 	}
 }
 
@@ -123,11 +123,11 @@ void APT_BaseBike::TurnRight_Implementation()
 	if (HasAuthority())
 	{
 		AddActorWorldRotation(FRotator(0, 90, 0));
+		UpdateTransform(GetActorTransform());
 		if (IsValid(TrailingComponent))
 		{
 			TrailingComponent->MakeTurnpoint();
 		}
-		UpdateTransform(GetActorTransform());
 	}
 }
 

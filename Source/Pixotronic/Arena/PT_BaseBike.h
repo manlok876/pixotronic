@@ -50,7 +50,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	UFUNCTION(NetMulticast, Unreliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void UpdateTransform(const FTransform& NewTransform);
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
