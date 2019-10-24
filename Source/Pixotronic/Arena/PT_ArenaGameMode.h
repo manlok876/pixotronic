@@ -35,4 +35,6 @@ private:
 	
 	float RoundStartDelay;
 	FTimerHandle RoundStartTimer;
+
+	int WinningScore;
 };
