@@ -33,7 +33,7 @@ AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
 bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 {
-	return (Super::ReadyToStartMatch_Implementation() && GetNumPlayers() == MaxPlayers);
+	return GetNumPlayers() == MaxPlayers;
 }
 
 void APT_ArenaGameMode::HandleMatchHasStarted()
@@ -53,7 +53,7 @@ bool APT_ArenaGameMode::ReadyToEndMatch_Implementation()
 
 void APT_ArenaGameMode::HandleMatchHasEnded()
 {
-	APT_ArenaGameState* GameState = GetGameState<APT_ArenaGameState>();
+	APT_ArenaGameState* CastGameState = GetGameState<APT_ArenaGameState>();
 }
 
 void APT_ArenaGameMode::RestartMatch()
