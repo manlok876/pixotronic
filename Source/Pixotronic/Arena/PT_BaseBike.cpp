@@ -40,7 +40,8 @@ APT_BaseBike::APT_BaseBike()
 	CollisionBox->SetBoxExtent(FVector(100, 50, 50));
 	CollisionBox->SetRelativeLocation(BikeMeshOffset);
 	CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	CollisionBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	CollisionBox->SetGenerateOverlapEvents(true);
+	CollisionBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	
@@ -48,6 +49,7 @@ APT_BaseBike::APT_BaseBike()
 	MeshComponent->bEditableWhenInherited = true;
 	MeshComponent->SetupAttachment(RootComponent);
 	MeshComponent->SetRelativeLocation(BikeMeshOffset);
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> BikeMesh(TEXT("/Game/Assets/Meshes/Sphere.Sphere"));
 	if (BikeMesh.Succeeded())
 	{
@@ -140,28 +142,11 @@ void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedCompo
 							 AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 							 int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("OnCollide"));
-		if (HasAuthority())
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Server"));
-		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Client"));
-		}
-	}
-
-	return;
-	MeshComponent->SetHiddenInGame(true);
-
-	CollisionBox->SetHiddenInGame(true);
-	CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	Speed = 0;
-
 	SetActorTickEnabled(false);
+	if (HasAuthority() && IsValid(CollisionBox))
+	{
+		CollisionBox->OnComponentBeginOverlap.RemoveAll(this);
+	}
 }
 
 void APT_BaseBike::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
