@@ -18,9 +18,29 @@ class PIXOTRONIC_API APT_ArenaGameState : public AGameState
 
 public:
 	APT_ArenaGameState();
+	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	UFUNCTION(BlueprintPure)
+	int GetMaxPlayerScore();
+
+	UPROPERTY(BlueprintAssignable)
 	FOnRoundStartedDelegate OnRoundStarted;
 
-protected:
+	UPROPERTY(Replicated)
 	int RoundNumber;
+
+	UPROPERTY(Replicated)
+	TMap<class APT_ArenaPlayerController*, FColor> PlayerColors;
+
+	UFUNCTION(BlueprintPure)
+	int GetNumAlivePlayers();
+	UFUNCTION(BlueprintCallable)
+	void RegisterPlayerSpawn(APlayerController* Player);
+	UFUNCTION(BlueprintCallable)
+	void RegisterPlayerDeath(APlayerController* Player);
+
+protected:
+	UPROPERTY(Replicated)
+	TSet<APlayerState*> AlivePlayers;
 };
