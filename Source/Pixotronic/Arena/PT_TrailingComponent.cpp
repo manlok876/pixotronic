@@ -93,7 +93,7 @@ void UPT_TrailingComponent::SetColor(const FColor& NewColor)
 	}
 }
 
-void UPT_TrailingComponent::MakeTurnpoint()
+void UPT_TrailingComponent::MakeTurnpoint_Implementation()
 {
 	if (bIsTrailingEnabled) 
 	{
@@ -102,7 +102,7 @@ void UPT_TrailingComponent::MakeTurnpoint()
 	}
 }
 
-void UPT_TrailingComponent::TurnOn()
+void UPT_TrailingComponent::TurnOn_Implementation()
 {
 	if (bIsTrailingEnabled)
 	{
@@ -112,7 +112,7 @@ void UPT_TrailingComponent::TurnOn()
 	MakeTurnpoint();
 }
 
-void UPT_TrailingComponent::TurnOff()
+void UPT_TrailingComponent::TurnOff_Implementation()
 {
 	if (!bIsTrailingEnabled)
 	{

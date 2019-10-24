@@ -30,15 +30,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetColor(const FColor& NewColor);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	void MakeTurnpoint();
 
 	// Enables trailing
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	void TurnOn();
 
 	// Disables trailing
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	void TurnOff();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
