@@ -6,6 +6,9 @@
 #include "GameFramework/GameMode.h"
 #include "PT_ArenaGameMode.generated.h"
 
+class APlayerStart;
+class AController;
+
 /**
  * 
  */
@@ -39,4 +42,7 @@ private:
 	FTimerHandle RoundStartTimer;
 
 	int WinningScore;
+
+	TMap<AController*, APlayerStart*> PlayerStartSpots;
+	TSet<APlayerStart*> TakenStartSpots;
 };

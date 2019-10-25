@@ -26,11 +26,22 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 
 AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
 {
+	if (PlayerStartSpots.Find(Player) != nullptr)
+	{
+		return PlayerStartSpots[Player];
+	}
+
 	for (TActorIterator<APlayerStart> StartItr(GetWorld()); StartItr; ++StartItr)
 	{
-		// Need to actually choose start point here
-		break;
+		if (!TakenStartSpots.Contains(*StartItr))
+		{
+			PlayerStartSpots.Add(Player, *StartItr);
+			TakenStartSpots.Add(*StartItr);
+			return *StartItr;
+		}
 	}
+
+	// If no start points found
 	return Super::ChoosePlayerStart_Implementation(Player);
 }
 
@@ -48,7 +59,7 @@ void APT_ArenaGameMode::HandleMatchHasStarted()
 
 APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
 {
-	APawn* PlayerPawn = Super::SpawnDefaultPawnFor(NewPlayer, StartSpot);
+	APawn* PlayerPawn = Super::SpawnDefaultPawnFor_Implementation(NewPlayer, StartSpot);
 	
 	APT_BaseBike* PlayerBike = Cast<APT_BaseBike>(PlayerPawn);
 	if (IsValid(PlayerBike))
