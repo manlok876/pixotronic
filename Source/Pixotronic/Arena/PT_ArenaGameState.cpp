@@ -3,6 +3,7 @@
 
 #include "PT_ArenaGameState.h"
 
+#include "GameFramework/PlayerState.h"
 #include "UnrealNetwork.h"
 
 APT_ArenaGameState::APT_ArenaGameState()
