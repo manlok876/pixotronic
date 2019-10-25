@@ -40,7 +40,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RegisterPlayerDeath(APlayerController* Player);
 
-protected:
 	UPROPERTY(Replicated)
 	TSet<APlayerState*> AlivePlayers;
 };
