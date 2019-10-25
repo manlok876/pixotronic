@@ -6,7 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "PT_BaseBike.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathDelegate, APawn*, Bike);
 
 UCLASS(Blueprintable)
 class PIXOTRONIC_API APT_BaseBike : public APawn
