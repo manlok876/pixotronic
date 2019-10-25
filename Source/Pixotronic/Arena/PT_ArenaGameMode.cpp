@@ -72,6 +72,10 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 			PlayerBike->OnDeath.AddDynamic(this, &APT_ArenaGameMode::OnBikeCrash);
 		}
 	}
+	else
+	{
+		UE_LOG(LogPlayerManagement, Error, TEXT("Failed to spawn bike for player"));
+	}
 	
 	return PlayerPawn;
 }
@@ -79,18 +83,16 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 bool APT_ArenaGameMode::ReadyToEndMatch_Implementation()
 {
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
-	if (IsValid(ArenaGameState))
-	{
-		return ArenaGameState->GetNumAlivePlayers() <= 1;
-	}
+	check(IsValid(ArenaGameState));
 
-	return false;
+	return ArenaGameState->GetNumAlivePlayers() <= 1;
 }
 
 void APT_ArenaGameMode::HandleMatchHasEnded()
 {
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
-	
+	check(IsValid(ArenaGameState));
+
 	for (APlayerState* PlayerState : ArenaGameState->AlivePlayers)
 	{
 		PlayerState->Score += 1.0;
@@ -131,6 +133,10 @@ void APT_ArenaGameMode::SetMaxPlayers(int NewMaxPlayers)
 void APT_ArenaGameMode::OnBikeCrash(APawn* Bike)
 {
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	check(IsValid(ArenaGameState));
+
 	APlayerState* CrashedPlayer = Bike->GetPlayerState();
+	check(IsValid(CrashedPlayer));
+
 	ArenaGameState->AlivePlayers.Remove(CrashedPlayer);
 }
