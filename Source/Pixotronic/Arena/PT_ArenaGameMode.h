@@ -22,6 +22,8 @@ public:
 	virtual bool ReadyToStartMatch_Implementation() override;
 	virtual void HandleMatchHasStarted() override;
 	
+	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
+
 	virtual bool ReadyToEndMatch_Implementation() override;
 	virtual void HandleMatchHasEnded();
 

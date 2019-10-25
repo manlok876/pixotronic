@@ -5,6 +5,7 @@
 
 #include "EngineUtils.h"
 #include "GameFramework/PlayerStart.h"
+#include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "PT_BaseBike.h"
@@ -45,6 +46,19 @@ void APT_ArenaGameMode::HandleMatchHasStarted()
 	// Maybe pause all controllers and resume after delay
 }
 
+APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
+{
+	APawn* PlayerPawn = Super::SpawnDefaultPawnFor(NewPlayer, StartSpot);
+	
+	APT_BaseBike* PlayerBike = Cast<APT_BaseBike>(PlayerPawn);
+	if (IsValid(PlayerBike))
+	{
+		// Set color based on starting spot
+	}
+	
+	return PlayerPawn;
+}
+
 bool APT_ArenaGameMode::ReadyToEndMatch_Implementation()
 {
 	return GetGameState<APT_ArenaGameState>()->GetNumAlivePlayers() <= 1;
@@ -54,7 +68,10 @@ void APT_ArenaGameMode::HandleMatchHasEnded()
 {
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 	
-	// Add points to surviving players, if any
+	for (APlayerState* PlayerState : ArenaGameState->AlivePlayers)
+	{
+		PlayerState->Score += 1.0;
+	}
 
 	if (ArenaGameState->GetMaxPlayerScore() < WinningScore)
 	{
