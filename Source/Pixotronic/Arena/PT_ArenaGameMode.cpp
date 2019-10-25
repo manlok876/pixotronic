@@ -65,6 +65,12 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 	if (IsValid(PlayerBike))
 	{
 		// Set color based on starting spot
+		APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+		if (IsValid(ArenaGameState))
+		{
+			ArenaGameState->AlivePlayers.Add(NewPlayer->PlayerState);
+			PlayerBike->OnDeath.AddDynamic(this, &APT_ArenaGameMode::OnBikeCrash);
+		}
 	}
 	
 	return PlayerPawn;
@@ -72,7 +78,13 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 
 bool APT_ArenaGameMode::ReadyToEndMatch_Implementation()
 {
-	return GetGameState<APT_ArenaGameState>()->GetNumAlivePlayers() <= 1;
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	if (IsValid(ArenaGameState))
+	{
+		return ArenaGameState->GetNumAlivePlayers() <= 1;
+	}
+
+	return false;
 }
 
 void APT_ArenaGameMode::HandleMatchHasEnded()
@@ -104,8 +116,8 @@ void APT_ArenaGameMode::RestartMatch()
 		{
 			// Destroy pawn so that it is re-created at start of new round
 			// to avoid messing with
-			//PlayerPawn->Destroy();
-			//PCItr->SetPawn(nullptr);
+			PlayerPawn->Destroy();
+			PCItr->SetPawn(nullptr);
 		}
 	}
 	StartMatch();
@@ -114,4 +126,11 @@ void APT_ArenaGameMode::RestartMatch()
 void APT_ArenaGameMode::SetMaxPlayers(int NewMaxPlayers)
 {
 	MaxPlayers = NewMaxPlayers;
+}
+
+void APT_ArenaGameMode::OnBikeCrash(APawn* Bike)
+{
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	APlayerState* CrashedPlayer = Bike->GetPlayerState();
+	ArenaGameState->AlivePlayers.Remove(CrashedPlayer);
 }

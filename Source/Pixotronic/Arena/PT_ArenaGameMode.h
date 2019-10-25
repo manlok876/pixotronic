@@ -35,6 +35,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetMaxPlayers(int NewMaxPlayers);
 
+protected: 
+	UFUNCTION()
+	void OnBikeCrash(APawn* Bike);
+
 private:
 	int MaxPlayers;
 	
