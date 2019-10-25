@@ -36,6 +36,16 @@ int APT_ArenaGameState::GetMaxPlayerScore()
 	return (int) MaxScore;
 }
 
+void APT_ArenaGameState::StartRound_Implementation()
+{
+	OnRoundStarted.Broadcast();
+}
+
+void APT_ArenaGameState::EndRound_Implementation()
+{
+	OnRoundEnded.Broadcast();
+}
+
 int APT_ArenaGameState::GetNumAlivePlayers()
 {
 	return AlivePlayers.Num();
