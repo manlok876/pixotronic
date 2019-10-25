@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "PT_BaseBike.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathDelegate);
+
 UCLASS(Blueprintable)
 class PIXOTRONIC_API APT_BaseBike : public APawn
 {
@@ -40,6 +42,9 @@ public:
 	void OnCollide(UPrimitiveComponent* OverlappedComponent, 
 				   AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 				   int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDeathDelegate OnDeath;
 
 protected:
 	static const FName TurnLeftBinding;

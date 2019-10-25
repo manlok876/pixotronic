@@ -147,6 +147,8 @@ void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedCompo
 	{
 		CollisionBox->OnComponentBeginOverlap.RemoveAll(this);
 	}
+
+	OnDeath.Broadcast();
 }
 
 void APT_BaseBike::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
