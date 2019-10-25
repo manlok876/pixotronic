@@ -20,6 +20,7 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	bDelayedStart = true;
 	SetMaxPlayers(2);
 	RoundStartDelay = 5.0f;
+	WinningScore = 5;
 }
 
 AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
