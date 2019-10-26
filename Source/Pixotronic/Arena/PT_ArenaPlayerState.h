@@ -17,7 +17,7 @@ class PIXOTRONIC_API APT_ArenaPlayerState : public APlayerState
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	FColor PlayerColor;
 
 	UFUNCTION(Server, Reliable, WithValidation)
