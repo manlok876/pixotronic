@@ -34,11 +34,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnRoundStartedDelegate OnRoundEnded;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	int RoundNumber;
-
-	UPROPERTY(Replicated)
-	TMap<class APT_ArenaPlayerController*, FColor> PlayerColors;
 
 	UFUNCTION(BlueprintPure)
 	int GetNumAlivePlayers();
