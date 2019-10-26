@@ -38,6 +38,11 @@ int APT_ArenaGameState::GetMaxPlayerScore()
 
 void APT_ArenaGameState::StartRound_Implementation()
 {
+	if (HasAuthority()) 
+	{
+		// Will get replicated to clients
+		RoundNumber++;
+	}
 	OnRoundStarted.Broadcast();
 }
 
