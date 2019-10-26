@@ -25,10 +25,10 @@ public:
 	float TrailHeight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FColor Color;
+	FLinearColor Color;
 
 	UFUNCTION(BlueprintCallable)
-	void SetColor(const FColor& NewColor);
+	void SetColor(const FLinearColor& NewColor);
 
 	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
 	void MakeTurnpoint();

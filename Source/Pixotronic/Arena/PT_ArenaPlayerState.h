@@ -18,8 +18,8 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
-	FColor PlayerColor;
+	FLinearColor PlayerColor;
 
 	UFUNCTION(Server, Reliable, WithValidation)
-	void SetColor(const FColor& NewColor);
+	void SetColor(const FLinearColor& NewColor);
 };

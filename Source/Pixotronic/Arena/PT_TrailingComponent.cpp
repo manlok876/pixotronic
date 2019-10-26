@@ -18,7 +18,7 @@ UPT_TrailingComponent::UPT_TrailingComponent()
 	TrailHeight = 100.0f;
 	TrailStartOffset = FVector(0.0f);
 
-	Color = FColor(255, 255, 255, 255);
+	Color = FLinearColor::FromSRGBColor(FColor(255, 255, 255, 255));
 
 	bIsTrailingEnabled = false;
 	CurrentInstance = -1;
@@ -82,13 +82,13 @@ void UPT_TrailingComponent::UpdateTrail()
 	}
 }
 
-void UPT_TrailingComponent::SetColor(const FColor& NewColor)
+void UPT_TrailingComponent::SetColor(const FLinearColor& NewColor)
 {
 	Color = NewColor;
 	UMaterialInstanceDynamic* NewMaterial = UMaterialInstanceDynamic::Create(GetMaterial(0), this);
 	if (NewMaterial != nullptr)
 	{
-		NewMaterial->SetVectorParameterValue(ColorParameterName, FLinearColor(NewColor));
+		NewMaterial->SetVectorParameterValue(ColorParameterName, NewColor);
 		SetMaterial(0, NewMaterial);
 	}
 }

@@ -30,7 +30,7 @@ public:
 
 	// Color used for bike and its trail
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FColor PlayerColor;
+	FLinearColor PlayerColor;
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void TurnLeft();
