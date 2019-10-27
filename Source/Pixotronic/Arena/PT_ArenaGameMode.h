@@ -8,6 +8,7 @@
 
 class APlayerStart;
 class AController;
+class APT_BaseBike;
 
 /**
  * 
@@ -38,6 +39,9 @@ public:
 protected: 
 	UFUNCTION()
 	void OnBikeCrash(APawn* Bike);
+
+	UFUNCTION()
+	void SetPlayerColor(AController* Player, APT_BaseBike* Bike, AActor* PlayerStart);
 
 private:
 	int MaxPlayers;

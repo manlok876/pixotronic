@@ -53,14 +53,16 @@ bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 void APT_ArenaGameMode::HandleMatchHasStarted()
 {
 	Super::HandleMatchHasStarted();
-	
-	// Maybe pause all controllers and resume after delay
+
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	check(IsValid(ArenaGameState));
+	ArenaGameState->StartRound();
 }
 
 APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
 {
 	APawn* PlayerPawn = Super::SpawnDefaultPawnFor_Implementation(NewPlayer, StartSpot);
-	
+
 	APT_BaseBike* PlayerBike = Cast<APT_BaseBike>(PlayerPawn);
 	if (IsValid(PlayerBike))
 	{
@@ -71,6 +73,7 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 			ArenaGameState->AlivePlayers.Add(NewPlayer->PlayerState);
 			PlayerBike->OnDeath.AddDynamic(this, &APT_ArenaGameMode::OnBikeCrash);
 		}
+		SetPlayerColor(NewPlayer, PlayerBike, StartSpot);
 	}
 	else
 	{
@@ -92,6 +95,8 @@ void APT_ArenaGameMode::HandleMatchHasEnded()
 {
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 	check(IsValid(ArenaGameState));
+
+	ArenaGameState->EndRound();
 
 	for (APlayerState* PlayerState : ArenaGameState->AlivePlayers)
 	{
@@ -139,4 +144,19 @@ void APT_ArenaGameMode::OnBikeCrash(APawn* Bike)
 	check(IsValid(CrashedPlayer));
 
 	ArenaGameState->AlivePlayers.Remove(CrashedPlayer);
+}
+
+void APT_ArenaGameMode::SetPlayerColor(AController* Player, APT_BaseBike* Bike, AActor* PlayerStart)
+{
+	if (!IsValid(Player))
+	{
+		return;
+	}
+
+	FLinearColor ColorToSet;
+
+	if (IsValid(Bike))
+	{
+		
+	}
 }
