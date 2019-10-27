@@ -29,8 +29,11 @@ public:
 	int AbilityPoints;
 
 	// Color used for bike and its trail
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FLinearColor BikeColor;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void SetColor(const FLinearColor& NewColor);
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void TurnLeft();
@@ -55,6 +58,8 @@ protected:
 
 	// Specifies portion of the screen that can be used for turning (for each side)
 	static const float TurningTouchArea;
+
+	static const FName ColorParameterName;
 
 	virtual void BeginPlay() override;
 

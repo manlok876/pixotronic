@@ -8,6 +8,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
 #include "Engine/Engine.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 #include "PT_TrailingComponent.h"
 
@@ -18,6 +19,8 @@ const FName APT_BaseBike::UseAbilityBinding("SpecialAbility");
 const FVector APT_BaseBike::BikeMeshOffset(120.0f, 0.0f, 0.0f);
 
 const float APT_BaseBike::TurningTouchArea = 0.4;
+
+const FName APT_BaseBike::ColorParameterName("Color");
 
 APT_BaseBike::APT_BaseBike()
 {
@@ -105,6 +108,27 @@ void APT_BaseBike::Tick(float DeltaTime)
 	}
 }
 
+void APT_BaseBike::SetColor_Implementation(const FLinearColor& NewColor)
+{
+	BikeColor = NewColor;
+
+	if (!IsValid(MeshComponent))
+	{
+		return;
+	}
+
+	UMaterialInstanceDynamic* NewMaterial = UMaterialInstanceDynamic::Create(MeshComponent->GetMaterial(0), this);
+	if (NewMaterial != nullptr)
+	{
+		NewMaterial->SetVectorParameterValue(ColorParameterName, NewColor);
+		MeshComponent->SetMaterial(0, NewMaterial);
+	}
+
+	if (IsValid(TrailingComponent))
+	{
+		TrailingComponent->SetColor(NewColor);
+	}
+}
 
 void APT_BaseBike::HandleTouchInput(ETouchIndex::Type FingerIndex, FVector Location)
 {
