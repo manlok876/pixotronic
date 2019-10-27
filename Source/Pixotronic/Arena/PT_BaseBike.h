@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Core.h"
+#include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PT_BaseBike.generated.h"
 
