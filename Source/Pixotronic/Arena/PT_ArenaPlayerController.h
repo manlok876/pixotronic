@@ -18,6 +18,7 @@ public:
 	APT_ArenaPlayerController();
 
 	virtual void SetupInputComponent() override;
+	virtual void OnPossess(APawn* Pawn) override;
 
 	UFUNCTION()
 	void LeaveGame();
