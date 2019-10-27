@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
+#include "Engine/Engine.h"
 
 #include "PT_TrailingComponent.h"
 
@@ -15,6 +16,8 @@ const FName APT_BaseBike::TurnRightBinding("TurnRight");
 const FName APT_BaseBike::UseAbilityBinding("SpecialAbility");
 
 const FVector APT_BaseBike::BikeMeshOffset(120.0f, 0.0f, 0.0f);
+
+const float APT_BaseBike::TurningTouchArea = 0.4;
 
 APT_BaseBike::APT_BaseBike()
 {
@@ -105,7 +108,23 @@ void APT_BaseBike::Tick(float DeltaTime)
 
 void APT_BaseBike::HandleTouchInput(ETouchIndex::Type FingerIndex, FVector Location)
 {
-	// Turn left or right depending on location
+	check(GEngine != nullptr);
+	check(GEngine->GameViewport != nullptr);
+
+	FVector2D ViewportSize;
+	GEngine->GameViewport->GetViewportSize(ViewportSize);
+
+	float LeftTurnThreshold = ViewportSize.X * TurningTouchArea;
+	float RightTurnThreshold = ViewportSize.X * (1 - TurningTouchArea);
+
+	if (Location.X < LeftTurnThreshold)
+	{
+		TurnLeft();
+	}
+	else if (Location.X > RightTurnThreshold)
+	{
+		TurnRight();
+	}
 }
 
 void APT_BaseBike::TurnLeft_Implementation()

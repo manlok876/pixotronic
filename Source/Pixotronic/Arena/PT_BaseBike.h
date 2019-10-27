@@ -53,6 +53,9 @@ protected:
 
 	static const FVector BikeMeshOffset;
 
+	// Specifies portion of the screen that can be used for turning (for each side)
+	static const float TurningTouchArea;
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
