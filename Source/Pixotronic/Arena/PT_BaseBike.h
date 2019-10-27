@@ -55,6 +55,9 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void HandleTouchInput(ETouchIndex::Type FingerIndex, FVector Location);
+
 	UFUNCTION(NetMulticast, Reliable)
 	void UpdateTransform(const FTransform& NewTransform);
 

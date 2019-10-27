@@ -102,6 +102,12 @@ void APT_BaseBike::Tick(float DeltaTime)
 	}
 }
 
+
+void APT_BaseBike::HandleTouchInput(ETouchIndex::Type FingerIndex, FVector Location)
+{
+	// Turn left or right depending on location
+}
+
 void APT_BaseBike::TurnLeft_Implementation()
 {
 	if (HasAuthority())
@@ -156,4 +162,6 @@ void APT_BaseBike::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction(TurnLeftBinding, IE_Pressed, this, &APT_BaseBike::TurnLeft);
 	PlayerInputComponent->BindAction(TurnRightBinding, IE_Pressed, this, &APT_BaseBike::TurnRight);
+
+	PlayerInputComponent->BindTouch(IE_Pressed, this, &APT_BaseBike::HandleTouchInput);
 }
