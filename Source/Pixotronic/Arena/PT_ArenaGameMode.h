@@ -41,7 +41,7 @@ protected:
 	void OnBikeCrash(APawn* Bike);
 
 	UFUNCTION()
-	void SetPlayerColor(AController* Player, APT_BaseBike* Bike, AActor* PlayerStart);
+	FLinearColor GetColorForPlayerStart(AActor* PlayerStart);
 
 private:
 	int MaxPlayers;
@@ -53,4 +53,5 @@ private:
 
 	TMap<AController*, APlayerStart*> PlayerStartSpots;
 	TSet<APlayerStart*> TakenStartSpots;
+	TArray<FLinearColor> PlayerColors;
 };

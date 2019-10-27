@@ -24,6 +24,12 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	SetMaxPlayers(2);
 	RoundStartDelay = 5.0f;
 	WinningScore = 5;
+
+	PlayerColors.Add(FLinearColor(1.0f, 1.0f, 1.0f));
+	PlayerColors.Add(FLinearColor(1.0f,    0,    0));
+	PlayerColors.Add(FLinearColor(   0, 1.0f,    0));
+	PlayerColors.Add(FLinearColor(   0,    0, 1.0f));
+	PlayerColors.Add(FLinearColor(   0, 1.0f, 1.0f));
 }
 
 AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
@@ -68,14 +74,19 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 	APT_BaseBike* PlayerBike = Cast<APT_BaseBike>(PlayerPawn);
 	if (IsValid(PlayerBike))
 	{
-		// Set color based on starting spot
 		APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 		if (IsValid(ArenaGameState))
 		{
 			ArenaGameState->AlivePlayers.Add(NewPlayer->PlayerState);
 			PlayerBike->OnDeath.AddDynamic(this, &APT_ArenaGameMode::OnBikeCrash);
 		}
-		SetPlayerColor(NewPlayer, PlayerBike, StartSpot);
+
+		APT_ArenaPlayerState* ArenaPlayerState =
+			Cast<APT_ArenaPlayerState>(NewPlayer->PlayerState);
+		if (IsValid(ArenaPlayerState))
+		{
+			ArenaPlayerState->PlayerColor = GetColorForPlayerStart(StartSpot);
+		}
 	}
 	else
 	{
@@ -148,17 +159,36 @@ void APT_ArenaGameMode::OnBikeCrash(APawn* Bike)
 	ArenaGameState->AlivePlayers.Remove(CrashedPlayer);
 }
 
-void APT_ArenaGameMode::SetPlayerColor(AController* Player, APT_BaseBike* Bike, AActor* PlayerStart)
+FLinearColor APT_ArenaGameMode::GetColorForPlayerStart(AActor* PlayerStart)
 {
-	if (!IsValid(Player))
+	FLinearColor ResultColor(1.0f, 1.0f, 1.0f);
+	
+	if (IsValid(PlayerStart))
 	{
-		return;
+		FString PlayerStartName = FString(PlayerStart->GetName());
+		int StartPointNumber = 0;
+		if (PlayerStartName.Contains("1"))
+		{
+			StartPointNumber = 1;
+		}
+		else if (PlayerStartName.Contains("2"))
+		{
+			StartPointNumber = 2;
+		}
+		else if (PlayerStartName.Contains("3"))
+		{
+			StartPointNumber = 3;
+		}
+		else if (PlayerStartName.Contains("4"))
+		{
+			StartPointNumber = 4;
+		}
+
+		if (PlayerColors.IsValidIndex(StartPointNumber))
+		{
+			ResultColor = PlayerColors[StartPointNumber];
+		}
 	}
 
-	FLinearColor ColorToSet;
-
-	if (IsValid(Bike))
-	{
-		
-	}
+	return ResultColor;
 }
