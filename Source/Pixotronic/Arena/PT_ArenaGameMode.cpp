@@ -10,12 +10,14 @@
 
 #include "PT_BaseBike.h"
 #include "PT_ArenaPlayerController.h"
+#include "PT_ArenaPlayerState.h"
 #include "PT_ArenaGameState.h"
 
 APT_ArenaGameMode::APT_ArenaGameMode() 
 {
 	DefaultPawnClass = APT_BaseBike::StaticClass();
 	PlayerControllerClass = APT_ArenaPlayerController::StaticClass();
+	PlayerStateClass = APT_ArenaPlayerState::StaticClass();
 	GameStateClass = APT_ArenaGameState::StaticClass();
 	
 	bDelayedStart = true;
