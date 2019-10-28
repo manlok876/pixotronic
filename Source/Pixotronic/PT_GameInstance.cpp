@@ -227,20 +227,11 @@ bool UPT_GameInstance::JoinSession(ULocalPlayer* LocalPlayer, const FOnlineSessi
 void UPT_GameInstance::JoinOnlineSession(const FBlueprintSessionResult& Session)
 {
 	ULocalPlayer* const Player = GetFirstGamePlayer();
+	FOnlineSessionSearchResult SearchResult = Session.OnlineResult;
 
-	if (SessionSearch->SearchResults.Num() > 0)
+	if (SearchResult.Session.OwningUserId != Player->GetPreferredUniqueNetId().GetUniqueNetId())
 	{
-		for (int32 i = 0; i < SessionSearch->SearchResults.Num(); i++)
-		{
-			if (SessionSearch->SearchResults[i].Session.OwningUserId != Player->GetPreferredUniqueNetId().GetUniqueNetId())
-			{
-				FOnlineSessionSearchResult SearchResult;
-				SearchResult = SessionSearch->SearchResults[i];
-
-				JoinSession(Player, SearchResult);
-				break;
-			}
-		}
+		JoinSession(Player, SearchResult);
 	}
 }
 
