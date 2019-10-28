@@ -8,6 +8,7 @@
 
 APT_ArenaGameState::APT_ArenaGameState()
 {
+	bAlwaysRelevant = true;
 	SetReplicates(true);
 
 	RoundNumber = 0;
