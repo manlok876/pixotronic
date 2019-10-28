@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Core.h"
+#include "CoreMinimal.h"
 #include "UnrealNetwork.h"
 #include "Online.h"
 

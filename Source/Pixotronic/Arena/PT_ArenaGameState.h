@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Core.h"
+#include "CoreMinimal.h"
 #include "GameFramework/GameState.h"
 #include "PT_ArenaGameState.generated.h"
 

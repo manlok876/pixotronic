@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Core.h"
+#include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
 #include "CreateSessionCallbackProxy.h"
