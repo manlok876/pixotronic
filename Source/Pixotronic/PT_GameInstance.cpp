@@ -5,6 +5,7 @@
 
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
+#include "Engine/LocalPlayer.h"
 #include "Kismet/GameplayStatics.h"
 
 const FName UPT_GameInstance::ArenaMapName("PT_Arena");
@@ -198,7 +199,7 @@ void UPT_GameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCo
 	}
 }
 
-bool UPT_GameInstance::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FOnlineSessionSearchResult& SearchResult)
+bool UPT_GameInstance::JoinSession(ULocalPlayer* LocalPlayer, const FOnlineSessionSearchResult& SearchResult)
 {
 	bool bSuccessful = false;
 
@@ -206,12 +207,17 @@ bool UPT_GameInstance::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName 
 	if (OnlineSub)
 	{
 		IOnlineSessionPtr SessionInterface = OnlineSub->GetSessionInterface();
-		if (SessionInterface.IsValid() && UserId.IsValid())
-		{
-			OnJoinSessionCompleteDelegateHandle = 
-				SessionInterface->AddOnJoinSessionCompleteDelegate_Handle(OnJoinSessionCompleteDelegate);
 
-			bSuccessful = SessionInterface->JoinSession(*UserId, SessionName, SearchResult);
+		if (LocalPlayer != nullptr)
+		{
+			TSharedPtr<const FUniqueNetId> UserId = LocalPlayer->GetPreferredUniqueNetId().GetUniqueNetId();
+			if (SessionInterface.IsValid() && UserId.IsValid())
+			{
+				OnJoinSessionCompleteDelegateHandle =
+					SessionInterface->AddOnJoinSessionCompleteDelegate_Handle(OnJoinSessionCompleteDelegate);
+
+				bSuccessful = SessionInterface->JoinSession(*UserId, GameSessionName, SearchResult);
+			}
 		}
 	}
 
@@ -231,7 +237,7 @@ void UPT_GameInstance::JoinOnlineSession(const FBlueprintSessionResult& Session)
 				FOnlineSessionSearchResult SearchResult;
 				SearchResult = SessionSearch->SearchResults[i];
 
-				JoinSession(Player->GetPreferredUniqueNetId().GetUniqueNetId(), GameSessionName, SearchResult);
+				JoinSession(Player, SearchResult);
 				break;
 			}
 		}

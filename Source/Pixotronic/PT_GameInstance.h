@@ -63,7 +63,7 @@ public:
 	FDelegateHandle OnJoinSessionCompleteDelegateHandle;
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
-	bool JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FOnlineSessionSearchResult& SearchResult);
+	virtual bool JoinSession(ULocalPlayer* LocalPlayer, const FOnlineSessionSearchResult& SearchResult) override;
 
 	UFUNCTION(BlueprintCallable)
 	void JoinOnlineSession(const FBlueprintSessionResult& Session);
