@@ -17,7 +17,7 @@ const FName APT_BaseBike::TurnLeftBinding("TurnLeft");
 const FName APT_BaseBike::TurnRightBinding("TurnRight");
 const FName APT_BaseBike::UseAbilityBinding("SpecialAbility");
 
-const FVector APT_BaseBike::BikeMeshOffset(120.0f, 0.0f, 0.0f);
+const FVector APT_BaseBike::BikeMeshOffset(20.0f, 0.0f, 0.0f);
 
 const float APT_BaseBike::TurningTouchArea = 0.4;
 
@@ -44,8 +44,8 @@ APT_BaseBike::APT_BaseBike()
 
 	check(CollisionBox != nullptr);
 	CollisionBox->SetupAttachment(RootComponent);
-	CollisionBox->SetBoxExtent(FVector(100, 50, 50));
-	CollisionBox->SetRelativeLocation(BikeMeshOffset);
+	CollisionBox->SetBoxExtent(FVector(50, 50, 50));
+	CollisionBox->SetRelativeLocation(FVector(50, 0, 0) + BikeMeshOffset);
 	CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionBox->SetGenerateOverlapEvents(true);
 	CollisionBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
