@@ -45,6 +45,15 @@ AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
 		{
 			PlayerStartSpots.Add(Player, *StartItr);
 			TakenStartSpots.Add(*StartItr);
+
+			// Assign player a color along with start spot
+			APT_ArenaPlayerState* ArenaPlayerState =
+				Cast<APT_ArenaPlayerState>(Player->PlayerState);
+			if (IsValid(ArenaPlayerState))
+			{
+				ArenaPlayerState->PlayerColor = GetColorForPlayerStart(*StartItr);
+			}
+
 			return *StartItr;
 		}
 	}
@@ -79,13 +88,6 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 		{
 			ArenaGameState->AlivePlayers.Add(NewPlayer->PlayerState);
 			PlayerBike->OnDeath.AddDynamic(this, &APT_ArenaGameMode::OnBikeCrash);
-		}
-
-		APT_ArenaPlayerState* ArenaPlayerState =
-			Cast<APT_ArenaPlayerState>(NewPlayer->PlayerState);
-		if (IsValid(ArenaPlayerState))
-		{
-			ArenaPlayerState->PlayerColor = GetColorForPlayerStart(StartSpot);
 		}
 	}
 	else
