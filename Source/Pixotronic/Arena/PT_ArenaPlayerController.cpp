@@ -35,6 +35,8 @@ void APT_ArenaPlayerController::SetupInputComponent()
 
 void APT_ArenaPlayerController::OnPossess(APawn* Pawn)
 {
+	Super::OnPossess(Pawn);
+
 	APT_BaseBike* Bike = Cast<APT_BaseBike>(Pawn);
 	APT_ArenaPlayerState* ArenaPlayerState = 
 		Cast<APT_ArenaPlayerState>(PlayerState);
