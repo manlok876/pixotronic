@@ -9,6 +9,7 @@
 #include "Components/InputComponent.h"
 #include "Engine/Engine.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "UnrealNetwork.h"
 
 #include "PT_TrailingComponent.h"
 
@@ -73,11 +74,14 @@ APT_BaseBike::APT_BaseBike()
 	// Init other variables
 
 	Speed = 500;
+	IsDead = false;
 }
 
 void APT_BaseBike::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APT_BaseBike, IsDead);
 }
 
 void APT_BaseBike::OnConstruction(const FTransform& Transform)
@@ -166,7 +170,7 @@ void APT_BaseBike::TurnLeft_Implementation()
 
 bool APT_BaseBike::TurnLeft_Validate()
 {
-	return true;
+	return !IsDead;
 }
 
 void APT_BaseBike::TurnRight_Implementation()
@@ -184,7 +188,7 @@ void APT_BaseBike::TurnRight_Implementation()
 
 bool APT_BaseBike::TurnRight_Validate()
 {
-	return true;
+	return !IsDead;
 }
 
 void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedComponent,
@@ -192,9 +196,13 @@ void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedCompo
 							 int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	SetActorTickEnabled(false);
-	if (HasAuthority() && IsValid(CollisionBox))
+	if (HasAuthority())
 	{
-		CollisionBox->OnComponentBeginOverlap.RemoveAll(this);
+		IsDead = true;
+		if (IsValid(CollisionBox))
+		{
+			CollisionBox->OnComponentBeginOverlap.RemoveAll(this);
+		}
 	}
 
 	OnDeath.Broadcast(this);

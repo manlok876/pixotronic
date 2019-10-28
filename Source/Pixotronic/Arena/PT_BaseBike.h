@@ -77,4 +77,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly)
 	class UPT_TrailingComponent* TrailingComponent;
+
+	UPROPERTY(Replicated)
+	bool IsDead;
 };
