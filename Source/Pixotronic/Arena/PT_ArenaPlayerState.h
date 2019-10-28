@@ -15,6 +15,8 @@ class PIXOTRONIC_API APT_ArenaPlayerState : public APlayerState
 	GENERATED_BODY()
 
 public:
+	APT_ArenaPlayerState();
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)

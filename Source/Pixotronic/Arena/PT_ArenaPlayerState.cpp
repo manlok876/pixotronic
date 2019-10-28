@@ -5,6 +5,12 @@
 
 #include "UnrealNetwork.h"
 
+APT_ArenaPlayerState::APT_ArenaPlayerState()
+{
+	bAlwaysRelevant = true;
+	SetReplicates(true);
+}
+
 void APT_ArenaPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
