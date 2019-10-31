@@ -11,6 +11,7 @@
 #include "Materials/MaterialInstanceDynamic.h"
 #include "UnrealNetwork.h"
 
+#include "PT_ArenaPlayerState.h"
 #include "PT_TrailingComponent.h"
 
 const FName APT_BaseBike::TurnLeftBinding("TurnLeft");
@@ -95,6 +96,17 @@ void APT_BaseBike::BeginPlay()
 	if (HasAuthority())
 	{
 		CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &APT_BaseBike::OnCollide);
+	}
+}
+
+void APT_BaseBike::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	APT_ArenaPlayerState* PossessingPlayerState = GetPlayerState<APT_ArenaPlayerState>();
+	if (IsValid(PossessingPlayerState))
+	{
+		SetColor(PossessingPlayerState->PlayerColor);
 	}
 }
 

@@ -7,8 +7,6 @@
 #include "Camera/CameraActor.h"
 
 #include "PT_GameInstance.h"
-#include "PT_ArenaPlayerState.h"
-#include "PT_BaseBike.h"
 
 const FName APT_ArenaPlayerController::ReturnBinding("Return");
 
@@ -31,20 +29,6 @@ void APT_ArenaPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	InputComponent->BindAction(ReturnBinding, IE_Released, this, &APT_ArenaPlayerController::LeaveGame);
-}
-
-void APT_ArenaPlayerController::OnPossess(APawn* Pawn)
-{
-	Super::OnPossess(Pawn);
-
-	APT_BaseBike* Bike = Cast<APT_BaseBike>(Pawn);
-	APT_ArenaPlayerState* ArenaPlayerState = 
-		Cast<APT_ArenaPlayerState>(PlayerState);
-
-	if (IsValid(Bike) && IsValid(ArenaPlayerState))
-	{
-		Bike->SetColor(ArenaPlayerState->PlayerColor);
-	}
 }
 
 void APT_ArenaPlayerController::LeaveGame()
