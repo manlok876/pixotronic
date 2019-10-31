@@ -9,6 +9,7 @@ APT_ArenaPlayerState::APT_ArenaPlayerState()
 {
 	bAlwaysRelevant = true;
 	SetReplicates(true);
+	ReadyToStart = false;
 }
 
 void APT_ArenaPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -16,6 +17,7 @@ void APT_ArenaPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APT_ArenaPlayerState, PlayerColor);
+	DOREPLIFETIME(APT_ArenaPlayerState, ReadyToStart);
 }
 
 void APT_ArenaPlayerState::SetColor_Implementation(const FLinearColor& NewColor)

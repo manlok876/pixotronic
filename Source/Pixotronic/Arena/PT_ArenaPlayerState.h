@@ -24,4 +24,7 @@ public:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void SetColor(const FLinearColor& NewColor);
+
+	UPROPERTY(Replicated)
+	bool ReadyToStart;
 };
