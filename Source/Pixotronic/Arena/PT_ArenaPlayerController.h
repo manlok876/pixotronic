@@ -19,6 +19,9 @@ public:
 
 	virtual void SetupInputComponent() override;
 
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void NotifyReadiness(bool IsReady);
+
 	UFUNCTION()
 	void LeaveGame();
 

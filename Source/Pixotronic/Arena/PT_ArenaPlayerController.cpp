@@ -7,6 +7,7 @@
 #include "Camera/CameraActor.h"
 
 #include "PT_GameInstance.h"
+#include "PT_ArenaPlayerState.h"
 
 const FName APT_ArenaPlayerController::ReturnBinding("Return");
 
@@ -29,6 +30,17 @@ void APT_ArenaPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	InputComponent->BindAction(ReturnBinding, IE_Released, this, &APT_ArenaPlayerController::LeaveGame);
+}
+
+void APT_ArenaPlayerController::NotifyReadiness_Implementation(bool IsReady)
+{
+	APT_ArenaPlayerState* MyState = CastChecked<APT_ArenaPlayerState>(PlayerState);
+	MyState->ReadyToStart = IsReady;
+}
+
+bool APT_ArenaPlayerController::NotifyReadiness_Validate(bool IsReady)
+{
+	return true;
 }
 
 void APT_ArenaPlayerController::LeaveGame()
