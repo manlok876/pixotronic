@@ -64,7 +64,26 @@ AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
 bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 {
-	return GetNumPlayers() == MaxPlayers;
+	if (GetNumPlayers() != MaxPlayers)
+	{
+		return false;
+	}
+
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	check(IsValid(ArenaGameState));
+
+	for (auto Player : ArenaGameState->PlayerArray)
+	{
+		APT_ArenaPlayerState* ArenaPlayer = Cast<APT_ArenaPlayerState>(Player);
+		check(ArenaPlayer != nullptr);
+
+		if (ArenaPlayer->ReadyToStart)
+		{
+			return false;
+		}
+	}
+
+    return true;
 }
 
 void APT_ArenaGameMode::HandleMatchHasStarted()
