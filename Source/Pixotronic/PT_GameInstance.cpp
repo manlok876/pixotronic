@@ -87,6 +87,7 @@ void UPT_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSucce
 			SessionInterface->ClearOnCreateSessionCompleteDelegate_Handle(OnCreateSessionCompleteDelegateHandle);
 			if (bWasSuccessful)
 			{
+				ClientState = EPT_ClientState::PTCS_Hosting;
 				OnStartSessionCompleteDelegateHandle =
 					SessionInterface->AddOnStartSessionCompleteDelegate_Handle(OnStartSessionCompleteDelegate);
 
@@ -195,6 +196,7 @@ void UPT_GameInstance::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCo
 
 			if (PlayerController && SessionInterface->GetResolvedConnectString(SessionName, TravelURL))
 			{
+				ClientState = EPT_ClientState::PTCS_Playing;
 				PlayerController->ClientTravel(TravelURL, ETravelType::TRAVEL_Absolute);
 			}
 		}
@@ -250,6 +252,7 @@ void UPT_GameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSucc
 			if (bWasSuccessful)
 			{
 				UGameplayStatics::OpenLevel(this, StartupMapName, true);
+				ClientState = EPT_ClientState::PTCS_Default;
 			}
 		}
 	}
