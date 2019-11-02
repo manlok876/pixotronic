@@ -36,6 +36,8 @@ public:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	int RoundNumber;
+	UFUNCTION(BlueprintPure)
+	float GetSecondsUntilNextRound();
 
 	UFUNCTION(BlueprintPure)
 	int GetNumAlivePlayers();

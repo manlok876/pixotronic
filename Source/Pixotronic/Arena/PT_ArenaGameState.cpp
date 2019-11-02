@@ -52,6 +52,11 @@ void APT_ArenaGameState::EndRound_Implementation()
 	OnRoundEnded.Broadcast();
 }
 
+float APT_ArenaGameState::GetSecondsUntilNextRound()
+{
+	return 0.0f;
+}
+
 int APT_ArenaGameState::GetNumAlivePlayers()
 {
 	return AlivePlayers.Num();
