@@ -25,7 +25,7 @@ public:
 	int GetMaxPlayerScore();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void ScheduleNextRound();
+	void ScheduleNextRound(float RoundStartDelay);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void StartRound();

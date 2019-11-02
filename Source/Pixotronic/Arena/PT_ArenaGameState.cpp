@@ -38,15 +38,15 @@ int APT_ArenaGameState::GetMaxPlayerScore()
 	return (int) MaxScore;
 }
 
-void APT_ArenaGameState::ScheduleNextRound_Implementation()
+void APT_ArenaGameState::ScheduleNextRound_Implementation(float RoundStartDelay)
 {
 	if (HasAuthority())
 	{
-		GetWorldTimerManager().SetTimer(NextRoundTimer, this, &APT_ArenaGameState::StartRound, 3.0f);
+		GetWorldTimerManager().SetTimer(NextRoundTimer, this, &APT_ArenaGameState::StartRound, RoundStartDelay);
 	}
 	else
 	{
-		GetWorldTimerManager().SetTimer(NextRoundTimer, 3.0f, false);
+		GetWorldTimerManager().SetTimer(NextRoundTimer, RoundStartDelay, false);
 	}
 }
 
