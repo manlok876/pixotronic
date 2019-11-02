@@ -47,7 +47,6 @@ private:
 	int MaxPlayers;
 	
 	float RoundStartDelay;
-	FTimerHandle RoundStartTimer;
 
 	int WinningScore;
 
