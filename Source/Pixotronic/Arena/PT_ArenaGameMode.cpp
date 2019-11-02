@@ -13,6 +13,8 @@
 #include "PT_ArenaPlayerState.h"
 #include "PT_ArenaGameState.h"
 
+const float APT_ArenaGameMode::RoundStartDelay = 5.0f;
+
 APT_ArenaGameMode::APT_ArenaGameMode() 
 {
 	DefaultPawnClass = APT_BaseBike::StaticClass();
@@ -22,7 +24,6 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	
 	bDelayedStart = true;
 	SetMaxPlayers(2);
-	RoundStartDelay = 5.0f;
 	WinningScore = 5;
 
 	PlayerColors.Add(FLinearColor(1.0f, 1.0f, 1.0f));

@@ -46,7 +46,7 @@ protected:
 private:
 	int MaxPlayers;
 	
-	float RoundStartDelay;
+	static const float RoundStartDelay;
 
 	int WinningScore;
 
