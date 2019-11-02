@@ -25,12 +25,21 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	bDelayedStart = true;
 	SetMaxPlayers(2);
 	WinningScore = 5;
+	WaitingRoundStart = false;
 
 	PlayerColors.Add(FLinearColor(1.0f, 1.0f, 1.0f));
 	PlayerColors.Add(FLinearColor(1.0f,    0,    0));
 	PlayerColors.Add(FLinearColor(   0, 1.0f,    0));
 	PlayerColors.Add(FLinearColor(   0,    0, 1.0f));
 	PlayerColors.Add(FLinearColor(   0, 1.0f, 1.0f));
+}
+
+void APT_ArenaGameMode::BeginPlay()
+{
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	check(IsValid(ArenaGameState));
+	check(&Super::StartMatch != &APT_ArenaGameMode::StartMatch);
+	ArenaGameState->OnRoundStarted.AddDynamic(this, &APT_ArenaGameMode::RespawnPlayersAndStart);
 }
 
 AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
@@ -65,6 +74,11 @@ AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
 bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 {
+	if (WaitingRoundStart)
+	{
+		return false;
+	}
+
 	if (GetNumPlayers() != MaxPlayers)
 	{
 		return false;
@@ -86,13 +100,18 @@ bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
     return true;
 }
 
+void APT_ArenaGameMode::StartMatch()
+{
+	UE_LOG(LogTemp, Display, TEXT("MyStartMatch"));
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	check(IsValid(ArenaGameState));
+	ArenaGameState->ScheduleNextRound(RoundStartDelay);
+	WaitingRoundStart = true;
+}
+
 void APT_ArenaGameMode::HandleMatchHasStarted()
 {
 	Super::HandleMatchHasStarted();
-
-	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
-	check(IsValid(ArenaGameState));
-	ArenaGameState->StartRound();
 }
 
 APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot)
@@ -161,7 +180,14 @@ void APT_ArenaGameMode::RestartMatch()
 			PCItr->SetPawn(nullptr);
 		}
 	}
-	StartMatch();
+	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
+	check(IsValid(ArenaGameState));
+	ArenaGameState->ScheduleNextRound(RoundStartDelay);
+}
+
+void APT_ArenaGameMode::RespawnPlayersAndStart()
+{
+	Super::StartMatch();
 }
 
 void APT_ArenaGameMode::SetMaxPlayers(int NewMaxPlayers)

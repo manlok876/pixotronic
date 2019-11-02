@@ -42,7 +42,8 @@ void APT_ArenaGameState::ScheduleNextRound_Implementation(float RoundStartDelay)
 {
 	if (HasAuthority())
 	{
-		GetWorldTimerManager().SetTimer(NextRoundTimer, this, &APT_ArenaGameState::StartRound, RoundStartDelay);
+		if (!NextRoundTimer.IsValid())
+			GetWorldTimerManager().SetTimer(NextRoundTimer, this, &APT_ArenaGameState::StartRound, RoundStartDelay);
 	}
 	else
 	{

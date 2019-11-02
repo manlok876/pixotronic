@@ -24,6 +24,7 @@ public:
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 	
 	virtual bool ReadyToStartMatch_Implementation() override;
+	virtual void StartMatch() override;
 	virtual void HandleMatchHasStarted() override;
 	
 	virtual APawn* SpawnDefaultPawnFor_Implementation(AController* NewPlayer, AActor* StartSpot) override;
@@ -33,10 +34,15 @@ public:
 
 	virtual void RestartMatch();
 
+	UFUNCTION()
+	void RespawnPlayersAndStart();
+
 	UFUNCTION(BlueprintCallable)
 	void SetMaxPlayers(int NewMaxPlayers);
 
 protected: 
+	virtual void BeginPlay() override;
+
 	UFUNCTION()
 	void OnBikeCrash(APawn* Bike);
 
@@ -44,6 +50,8 @@ protected:
 	FLinearColor GetColorForPlayerStart(AActor* PlayerStart);
 
 private:
+	bool WaitingRoundStart;
+
 	int MaxPlayers;
 	
 	static const float RoundStartDelay;
