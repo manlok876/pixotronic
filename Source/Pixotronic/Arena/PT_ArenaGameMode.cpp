@@ -74,8 +74,7 @@ bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 
 	for (auto Player : ArenaGameState->PlayerArray)
 	{
-		APT_ArenaPlayerState* ArenaPlayer = Cast<APT_ArenaPlayerState>(Player);
-		check(ArenaPlayer != nullptr);
+		APT_ArenaPlayerState* ArenaPlayer = CastChecked<APT_ArenaPlayerState>(Player);
 
 		if (ArenaPlayer->ReadyToStart)
 		{
