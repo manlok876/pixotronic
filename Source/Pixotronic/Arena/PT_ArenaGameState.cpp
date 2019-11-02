@@ -4,6 +4,7 @@
 #include "PT_ArenaGameState.h"
 
 #include "GameFramework/PlayerState.h"
+#include "TimerManager.h"
 #include "UnrealNetwork.h"
 
 APT_ArenaGameState::APT_ArenaGameState()
@@ -37,8 +38,25 @@ int APT_ArenaGameState::GetMaxPlayerScore()
 	return (int) MaxScore;
 }
 
+void APT_ArenaGameState::ScheduleNextRound_Implementation()
+{
+	if (HasAuthority())
+	{
+		GetWorldTimerManager().SetTimer(NextRoundTimer, this, &APT_ArenaGameState::StartRound, 3.0f);
+	}
+	else
+	{
+		GetWorldTimerManager().SetTimer(NextRoundTimer, 3.0f, false);
+	}
+}
+
 void APT_ArenaGameState::StartRound_Implementation()
 {
+	if (NextRoundTimer.IsValid())
+	{
+		NextRoundTimer.Invalidate();
+	}
+
 	if (HasAuthority()) 
 	{
 		// Will get replicated to clients
@@ -54,7 +72,7 @@ void APT_ArenaGameState::EndRound_Implementation()
 
 float APT_ArenaGameState::GetSecondsUntilNextRound()
 {
-	return 0.0f;
+	return GetWorldTimerManager().GetTimerRemaining(NextRoundTimer);
 }
 
 int APT_ArenaGameState::GetNumAlivePlayers()

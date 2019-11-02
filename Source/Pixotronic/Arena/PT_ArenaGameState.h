@@ -25,6 +25,9 @@ public:
 	int GetMaxPlayerScore();
 
 	UFUNCTION(NetMulticast, Reliable)
+	void ScheduleNextRound();
+
+	UFUNCTION(NetMulticast, Reliable)
 	void StartRound();
 	UPROPERTY(BlueprintAssignable)
 	FOnRoundStartedDelegate OnRoundStarted;
@@ -48,4 +51,7 @@ public:
 
 	UPROPERTY(Replicated)
 	TSet<APlayerState*> AlivePlayers;
+
+private:
+	FTimerHandle NextRoundTimer;
 };
