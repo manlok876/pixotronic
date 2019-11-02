@@ -27,6 +27,8 @@ UPT_GameInstance::UPT_GameInstance()
 
 	OnDestroySessionCompleteDelegate =
 		FOnDestroySessionCompleteDelegate::CreateUObject(this, &UPT_GameInstance::OnDestroySessionComplete);
+
+	ClientState = EPT_ClientState::PTCS_Default;
 }
 
 void UPT_GameInstance::StartOnlineGame()

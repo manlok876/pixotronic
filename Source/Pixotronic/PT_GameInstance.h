@@ -9,6 +9,19 @@
 #include "FindSessionsCallbackProxy.h"
 #include "PT_GameInstance.generated.h"
 
+UENUM()
+enum EPT_ClientState
+{
+	/** Doing nothing (main menu) */
+	PTCS_Default  UMETA(DisplayName = "Default"),
+	/** Hosted a session, waiting to start match */
+	PTCS_Hosting  UMETA(DisplayName = "Hosting"),
+	/** Hosted/Joined a session, waiting for match to start */
+	PTCS_Lobby  UMETA(DisplayName = "Waiting in Lobby"),
+	/** Participating in started match */
+	PTCS_Playing  UMETA(DisplayName = "In a Match")
+};
+
 /**
  * 
  */
@@ -80,4 +93,6 @@ public:
 private:
 	static const FName ArenaMapName;
 	static const FName StartupMapName;
+
+	EPT_ClientState ClientState;
 };
