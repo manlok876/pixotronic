@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "PT_Structs.h"
 #include "PT_BaseBike.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeathDelegate, APawn*, Bike);
@@ -35,6 +36,9 @@ public:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void SetColor(const FLinearColor& NewColor);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void ApplyBikeModel(const FPT_BikeModel& Model);
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void TurnLeft();
@@ -78,6 +82,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly)
 	class UPT_TrailingComponent* TrailingComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly)
+	UActorComponent* AbilityComponent;
 
 	UPROPERTY(Replicated)
 	bool IsDead;
