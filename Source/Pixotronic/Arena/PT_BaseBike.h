@@ -11,6 +11,10 @@ struct FPT_BikeModel
 {
 	GENERATED_USTRUCT_BODY()
 
+	/** used to display info about selected model. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName Name;
+
 	/** Mesh to use for this bike. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* Mesh;
