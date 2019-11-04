@@ -19,13 +19,3 @@ void APT_ArenaPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	DOREPLIFETIME(APT_ArenaPlayerState, PlayerColor);
 	DOREPLIFETIME(APT_ArenaPlayerState, ReadyToStart);
 }
-
-void APT_ArenaPlayerState::SetColor_Implementation(const FLinearColor& NewColor)
-{
-	PlayerColor = NewColor;
-}
-
-bool APT_ArenaPlayerState::SetColor_Validate(const FLinearColor& NewColor)
-{
-	return true;
-}

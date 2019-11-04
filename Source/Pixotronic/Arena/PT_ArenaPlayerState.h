@@ -22,9 +22,6 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	FLinearColor PlayerColor;
 
-	UFUNCTION(Server, Reliable, WithValidation)
-	void SetColor(const FLinearColor& NewColor);
-
 	UPROPERTY(Replicated)
 	bool ReadyToStart;
 };

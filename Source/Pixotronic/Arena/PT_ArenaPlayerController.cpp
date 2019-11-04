@@ -32,6 +32,20 @@ void APT_ArenaPlayerController::SetupInputComponent()
 	InputComponent->BindAction(ReturnBinding, IE_Released, this, &APT_ArenaPlayerController::LeaveGame);
 }
 
+void APT_ArenaPlayerController::SetColor_Implementation(const FLinearColor& NewColor)
+{
+	APT_ArenaPlayerState* ArenaPlayerState = Cast<APT_ArenaPlayerState>(PlayerState);
+	if (IsValid(ArenaPlayerState))
+	{
+		ArenaPlayerState->PlayerColor = NewColor;
+	}
+}
+
+bool APT_ArenaPlayerController::SetColor_Validate(const FLinearColor& NewColor)
+{
+	return true;
+}
+
 void APT_ArenaPlayerController::NotifyReadiness_Implementation(bool IsReady)
 {
 	APT_ArenaPlayerState* MyState = CastChecked<APT_ArenaPlayerState>(PlayerState);

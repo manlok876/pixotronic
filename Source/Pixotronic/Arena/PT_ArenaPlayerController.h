@@ -19,6 +19,9 @@ public:
 
 	virtual void SetupInputComponent() override;
 
+	UFUNCTION(Server, Reliable, WithValidation)
+	void SetColor(const FLinearColor& NewColor);
+
 	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
 	void NotifyReadiness(bool IsReady);
 
