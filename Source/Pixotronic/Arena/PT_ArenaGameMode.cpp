@@ -30,8 +30,8 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	PlayerColors.Add(FLinearColor(1.0f, 1.0f, 1.0f));
 	PlayerColors.Add(FLinearColor(1.0f,    0,    0));
 	PlayerColors.Add(FLinearColor(   0, 1.0f,    0));
+	PlayerColors.Add(FLinearColor(1.0f, 1.0f,    0));
 	PlayerColors.Add(FLinearColor(   0,    0, 1.0f));
-	PlayerColors.Add(FLinearColor(   0, 1.0f, 1.0f));
 }
 
 void APT_ArenaGameMode::BeginPlay()
