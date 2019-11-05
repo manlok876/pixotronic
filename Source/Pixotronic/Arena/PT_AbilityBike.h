@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Arena/PT_BaseBike.h"
+#include "PT_Structs.h"
 #include "PT_AbilityBike.generated.h"
 
 /**
@@ -18,6 +19,9 @@ public:
 	APT_AbilityBike();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	
+	UFUNCTION(Server, WithValidation, Reliable)
+	void ApplyBikeModel(const FPT_BikeModel& Model);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Replicated)
