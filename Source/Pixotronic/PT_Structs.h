@@ -22,4 +22,6 @@ struct FPT_BikeModel
 	/** Class of component responsible for special ability of this bike */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UActorComponent> AbilityComponentClass;
+
+  FPT_BikeModel();
 };
