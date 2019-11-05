@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "PT_Structs.h"
 #include "PT_ArenaPlayerState.generated.h"
 
 /**
@@ -21,6 +22,9 @@ public:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	FLinearColor PlayerColor;
+
+  UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+  FPT_BikeModel ChosenBike;
 
 	UPROPERTY(Replicated)
 	bool ReadyToStart;
