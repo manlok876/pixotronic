@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "PT_Structs.h"
 #include "PT_ArenaPlayerController.generated.h"
 
 /**
@@ -21,6 +22,9 @@ public:
 
 	UFUNCTION(Server, Reliable, WithValidation)
 	void SetColor(const FLinearColor& NewColor);
+
+  UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+  void ChooseModel(const FPT_BikeModel& BikeModel);
 
 	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
 	void NotifyReadiness(bool IsReady);

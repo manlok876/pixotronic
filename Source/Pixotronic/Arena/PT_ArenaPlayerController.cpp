@@ -32,6 +32,20 @@ void APT_ArenaPlayerController::SetupInputComponent()
 	InputComponent->BindAction(ReturnBinding, IE_Released, this, &APT_ArenaPlayerController::LeaveGame);
 }
 
+void APT_ArenaPlayerController::ChooseModel_Implementation(const FPT_BikeModel& BikeModel)
+{
+  APT_ArenaPlayerState* ArenaPlayerState = Cast<APT_ArenaPlayerState>(PlayerState);
+  if (IsValid(ArenaPlayerState))
+  {
+    ArenaPlayerState->ChosenBike = BikeModel;
+  }
+}
+
+bool APT_ArenaPlayerController::ChooseModel_Validate(const FPT_BikeModel& BikeModel)
+{
+  return true;
+}
+
 void APT_ArenaPlayerController::SetColor_Implementation(const FLinearColor& NewColor)
 {
 	APT_ArenaPlayerState* ArenaPlayerState = Cast<APT_ArenaPlayerState>(PlayerState);
