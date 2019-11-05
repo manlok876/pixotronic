@@ -25,6 +25,7 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	bDelayedStart = true;
 	SetMaxPlayers(2);
 	WinningScore = 5;
+	WaitingRoundStart = false;
 
 	PlayerColors.Add(FLinearColor(1.0f, 1.0f, 1.0f));
 	PlayerColors.Add(FLinearColor(1.0f,    0,    0));
@@ -72,6 +73,11 @@ AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
 
 bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 {
+	if (WaitingRoundStart)
+	{
+		return false;
+	}
+
 	if (GetNumPlayers() != MaxPlayers)
 	{
 		return false;
@@ -99,6 +105,7 @@ void APT_ArenaGameMode::StartMatch()
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 	check(IsValid(ArenaGameState));
 	ArenaGameState->ScheduleNextRound(RoundStartDelay);
+	WaitingRoundStart = true;
 	ArenaGameState->StartMatch();
 }
 
