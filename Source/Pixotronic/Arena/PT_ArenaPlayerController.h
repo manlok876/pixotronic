@@ -23,8 +23,8 @@ public:
 	UFUNCTION(Server, Reliable, WithValidation)
 	void SetColor(const FLinearColor& NewColor);
 
-  UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
-  void ChooseModel(const FPT_BikeModel& BikeModel);
+	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
+	void ChooseModel(const FPT_BikeModel& BikeModel);
 
 	UFUNCTION(Server, WithValidation, Reliable, BlueprintCallable)
 	void NotifyReadiness(bool IsReady);
