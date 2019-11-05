@@ -51,6 +51,11 @@ void APT_ArenaGameState::ScheduleNextRound_Implementation(float RoundStartDelay)
 	}
 }
 
+void APT_ArenaGameState::StartMatch_Implementation()
+{
+	OnMatchStarted.Broadcast();
+}
+
 void APT_ArenaGameState::StartRound_Implementation()
 {
 	if (NextRoundTimer.IsValid())
@@ -69,6 +74,11 @@ void APT_ArenaGameState::StartRound_Implementation()
 void APT_ArenaGameState::EndRound_Implementation()
 {
 	OnRoundEnded.Broadcast();
+}
+
+void APT_ArenaGameState::EndMatch_Implementation()
+{
+	OnMatchEnded.Broadcast();
 }
 
 float APT_ArenaGameState::GetSecondsUntilNextRound()

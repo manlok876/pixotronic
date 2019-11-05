@@ -25,6 +25,11 @@ public:
 	int GetMaxPlayerScore();
 
 	UFUNCTION(NetMulticast, Reliable)
+	void StartMatch();
+	UPROPERTY(BlueprintAssignable)
+	FOnRoundStartedDelegate OnMatchStarted;
+
+	UFUNCTION(NetMulticast, Reliable)
 	void ScheduleNextRound(float RoundStartDelay);
 
 	UFUNCTION(NetMulticast, Reliable)
@@ -36,6 +41,11 @@ public:
 	void EndRound();
 	UPROPERTY(BlueprintAssignable)
 	FOnRoundStartedDelegate OnRoundEnded;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void EndMatch();
+	UPROPERTY(BlueprintAssignable)
+	FOnRoundStartedDelegate OnMatchEnded;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	int RoundNumber;
