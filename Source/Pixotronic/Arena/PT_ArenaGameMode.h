@@ -50,8 +50,6 @@ protected:
 	FLinearColor GetColorForPlayerStart(AActor* PlayerStart);
 
 private:
-	bool WaitingRoundStart;
-
 	int MaxPlayers;
 	
 	static const float RoundStartDelay;
