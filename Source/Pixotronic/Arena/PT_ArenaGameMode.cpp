@@ -99,6 +99,7 @@ void APT_ArenaGameMode::StartMatch()
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 	check(IsValid(ArenaGameState));
 	ArenaGameState->ScheduleNextRound(RoundStartDelay);
+	ArenaGameState->StartMatch();
 }
 
 void APT_ArenaGameMode::HandleMatchHasStarted()
@@ -154,7 +155,7 @@ void APT_ArenaGameMode::HandleMatchHasEnded()
 	}
 	else 
 	{
-		// Do nothing, maybe display a message
+		ArenaGameState->EndMatch();
 	}
 }
 
