@@ -13,5 +13,13 @@ UCLASS()
 class PIXOTRONIC_API APT_AbilityBike : public APT_BaseBike
 {
 	GENERATED_BODY()
-	
+
+public:
+	APT_AbilityBike();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Replicated)
+	UActorComponent* AbilityComponent;
 };
