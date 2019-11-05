@@ -71,7 +71,6 @@ APT_BaseBike::APT_BaseBike()
 	MeshComponent->SetRelativeScale3D(FVector(2.0f, 1.0f, 1.0f));
 	MeshComponent->SetSimulatePhysics(false);
 
-	AbilityComponent = nullptr;
 
 	// Init other variables
 
@@ -108,24 +107,6 @@ void APT_BaseBike::PossessedBy(AController* NewController)
 	if (IsValid(PossessingPlayerState))
 	{
 		SetColor(PossessingPlayerState->PlayerColor);
-	}
-}
-
-void APT_BaseBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
-{
-	if (IsValid(MeshComponent))
-	{
-		MeshComponent->SetStaticMesh(Model.Mesh);
-	}
-	if (IsValid(AbilityComponent))
-	{
-		AbilityComponent->DestroyComponent();
-	}
-	
-	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get());
-	if (IsValid(AbilityComponent))
-	{
-		AbilityComponent->RegisterComponent();
 	}
 }
 
