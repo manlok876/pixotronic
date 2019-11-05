@@ -23,7 +23,7 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Replicated)
 	FLinearColor PlayerColor;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
 	FPT_BikeModel ChosenBike;
 
 	UPROPERTY(Replicated)

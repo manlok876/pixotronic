@@ -18,4 +18,5 @@ void APT_ArenaPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 
 	DOREPLIFETIME(APT_ArenaPlayerState, PlayerColor);
 	DOREPLIFETIME(APT_ArenaPlayerState, ReadyToStart);
+	DOREPLIFETIME(APT_ArenaPlayerState, ChosenBike);
 }
