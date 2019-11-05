@@ -84,7 +84,7 @@ bool APT_ArenaGameMode::ReadyToStartMatch_Implementation()
 	{
 		APT_ArenaPlayerState* ArenaPlayer = CastChecked<APT_ArenaPlayerState>(Player);
 
-		if (ArenaPlayer->ReadyToStart)
+		if (!ArenaPlayer->ReadyToStart)
 		{
 			return false;
 		}
