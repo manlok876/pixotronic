@@ -8,7 +8,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "PT_BaseBike.h"
+#include "PT_AbilityBike.h"
 #include "PT_ArenaPlayerController.h"
 #include "PT_ArenaPlayerState.h"
 #include "PT_ArenaGameState.h"
@@ -17,7 +17,7 @@ const float APT_ArenaGameMode::RoundStartDelay = 5.0f;
 
 APT_ArenaGameMode::APT_ArenaGameMode() 
 {
-	DefaultPawnClass = APT_BaseBike::StaticClass();
+	DefaultPawnClass = APT_AbilityBike::StaticClass();
 	PlayerControllerClass = APT_ArenaPlayerController::StaticClass();
 	PlayerStateClass = APT_ArenaPlayerState::StaticClass();
 	GameStateClass = APT_ArenaGameState::StaticClass();
