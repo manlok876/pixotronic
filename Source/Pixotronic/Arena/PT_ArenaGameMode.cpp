@@ -118,9 +118,14 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 {
 	APawn* PlayerPawn = Super::SpawnDefaultPawnFor_Implementation(NewPlayer, StartSpot);
 
-	APT_BaseBike* PlayerBike = Cast<APT_BaseBike>(PlayerPawn);
+	APT_AbilityBike* PlayerBike = Cast<APT_AbilityBike>(PlayerPawn);
 	if (IsValid(PlayerBike))
 	{
+		APT_ArenaPlayerState* ArenaPlayer = Cast<APT_ArenaPlayerState>(NewPlayer->PlayerState);
+		if (IsValid(ArenaPlayer))
+		{
+			PlayerBike->ApplyBikeModel(ArenaPlayer->ChosenBike);
+		}
 		APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 		if (IsValid(ArenaGameState))
 		{
