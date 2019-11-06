@@ -118,6 +118,8 @@ APawn* APT_ArenaGameMode::SpawnDefaultPawnFor_Implementation(AController* NewPla
 {
 	APawn* PlayerPawn = Super::SpawnDefaultPawnFor_Implementation(NewPlayer, StartSpot);
 
+	PlayerPawn->SetOwner(NewPlayer);
+
 	APT_AbilityBike* PlayerBike = Cast<APT_AbilityBike>(PlayerPawn);
 	if (IsValid(PlayerBike))
 	{
