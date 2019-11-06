@@ -26,4 +26,8 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Replicated)
 	UActorComponent* AbilityComponent;
+
+private:
+	UFUNCTION(NetMulticast, Reliable)
+	void ChangeBikeMesh(class UStaticMesh* NewMesh);
 };

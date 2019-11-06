@@ -20,16 +20,17 @@ void APT_AbilityBike::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 {
-	if (IsValid(MeshComponent) && IsValid(Model.Mesh))
-	{
-		MeshComponent->SetStaticMesh(Model.Mesh);
-	}
+	ChangeBikeMesh(Model.Mesh);
 
 	if (IsValid(AbilityComponent))
 	{
 		AbilityComponent->DestroyComponent();
 	}
 
+	if (Model.AbilityComponentClass == nullptr)
+	{
+		return;
+	}
 	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), Model.Name);
 	if (IsValid(AbilityComponent))
 	{
@@ -41,4 +42,12 @@ void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 bool APT_AbilityBike::ApplyBikeModel_Validate(const FPT_BikeModel& Model)
 {
 	return true;
+}
+
+void APT_AbilityBike::ChangeBikeMesh_Implementation(UStaticMesh* NewMesh)
+{
+	if (IsValid(MeshComponent) && IsValid(NewMesh))
+	{
+		MeshComponent->SetStaticMesh(NewMesh);
+	}
 }
