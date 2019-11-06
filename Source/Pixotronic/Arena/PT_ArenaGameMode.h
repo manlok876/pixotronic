@@ -55,10 +55,14 @@ private:
 	int MaxPlayers;
 	
 	static const float RoundStartDelay;
+	static const float ArenaClearDelay;
 
 	int WinningScore;
 
 	TMap<AController*, APlayerStart*> PlayerStartSpots;
 	TSet<APlayerStart*> TakenStartSpots;
 	TArray<FLinearColor> PlayerColors;
+
+	UFUNCTION()
+	void ClearArena();
 };

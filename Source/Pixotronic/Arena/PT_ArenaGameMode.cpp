@@ -6,6 +6,7 @@
 #include "EngineUtils.h"
 #include "GameFramework/PlayerStart.h"
 #include "GameFramework/PlayerState.h"
+#include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "PT_AbilityBike.h"
@@ -14,6 +15,7 @@
 #include "PT_ArenaGameState.h"
 
 const float APT_ArenaGameMode::RoundStartDelay = 5.0f;
+const float APT_ArenaGameMode::ArenaClearDelay = 3.0f;
 
 APT_ArenaGameMode::APT_ArenaGameMode() 
 {
@@ -176,17 +178,10 @@ void APT_ArenaGameMode::HandleMatchHasEnded()
 void APT_ArenaGameMode::RestartMatch()
 {
 	SetMatchState(MatchState::WaitingToStart);
-	for (TActorIterator<APlayerController> PCItr(GetWorld()); PCItr; ++PCItr)
-	{
-		APawn* PlayerPawn = PCItr->GetPawn();
-		if (IsValid(PlayerPawn))
-		{
-			// Destroy pawn so that it is re-created at start of new round
-			// to avoid messing with
-			PlayerPawn->Destroy();
-			PCItr->SetPawn(nullptr);
-		}
-	}
+	
+	FTimerHandle ArenaClearTimerHandle;
+	GetWorldTimerManager().SetTimer(ArenaClearTimerHandle, this, &APT_ArenaGameMode::ClearArena, ArenaClearDelay);
+
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 	check(IsValid(ArenaGameState));
 	ArenaGameState->ScheduleNextRound(RoundStartDelay);
@@ -245,4 +240,19 @@ FLinearColor APT_ArenaGameMode::GetColorForPlayerStart(AActor* PlayerStart)
 	}
 
 	return ResultColor;
+}
+
+void APT_ArenaGameMode::ClearArena()
+{
+	for (TActorIterator<APlayerController> PCItr(GetWorld()); PCItr; ++PCItr)
+	{
+		APawn* PlayerPawn = PCItr->GetPawn();
+		if (IsValid(PlayerPawn))
+		{
+			// Destroy pawn so that it is re-created at start of new round
+			// to avoid messing with
+			PlayerPawn->Destroy();
+			PCItr->SetPawn(nullptr);
+		}
+	}
 }
