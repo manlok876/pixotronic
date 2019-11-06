@@ -13,7 +13,7 @@ struct FPT_BikeModel
 
 	/** used to display info about selected model. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName Name;
+	FString Name;
 
 	/** Mesh to use for this bike. */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -23,5 +23,5 @@ struct FPT_BikeModel
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UActorComponent> AbilityComponentClass;
 
-  FPT_BikeModel();
+	FPT_BikeModel();
 };

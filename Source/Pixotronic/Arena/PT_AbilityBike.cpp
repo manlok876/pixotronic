@@ -31,7 +31,7 @@ void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 	{
 		return;
 	}
-	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), Model.Name);
+	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), *Model.Name);
 	if (IsValid(AbilityComponent))
 	{
 		AbilityComponent->RegisterComponent();
