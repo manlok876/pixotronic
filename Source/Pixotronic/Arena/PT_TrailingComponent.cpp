@@ -109,7 +109,7 @@ void UPT_TrailingComponent::TurnOn_Implementation()
 		return;
 	}
 	bIsTrailingEnabled = true;
-	MakeTurnpoint();
+	StartNewSegment(false);
 }
 
 void UPT_TrailingComponent::TurnOff_Implementation()
@@ -138,8 +138,12 @@ void UPT_TrailingComponent::EndCurrentSegment()
 	}
 }
 
-void UPT_TrailingComponent::StartNewSegment()
+void UPT_TrailingComponent::StartNewSegment(bool ConnectedToPrevious)
 {
+	if (!bIsTrailingEnabled)
+	{
+		return;
+	}
 	int NewInstance =
 		AddInstance(
 			FTransform(
@@ -149,7 +153,7 @@ void UPT_TrailingComponent::StartNewSegment()
 	if (NewInstance >= 0)
 	{
 		check(NewInstance > CurrentInstance);
-		if (TurnPoints.Num() == 0)
+		if (!ConnectedToPrevious || TurnPoints.Num() == 0)
 		{
 			AddTurnPoint();
 		}

@@ -73,7 +73,7 @@ private:
 	UFUNCTION()
 	void EndCurrentSegment();
 	UFUNCTION()
-	void StartNewSegment();
+	void StartNewSegment(bool ConnectedToPrevious = true);
 
 	UFUNCTION()
 	void AddTurnPoint();
