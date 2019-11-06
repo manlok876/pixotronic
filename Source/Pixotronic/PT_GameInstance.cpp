@@ -3,6 +3,7 @@
 
 #include "PT_GameInstance.h"
 
+#include "Engine.h"
 #include "OnlineSessionSettings.h"
 #include "OnlineSubsystem.h"
 #include "Engine/LocalPlayer.h"
@@ -73,6 +74,11 @@ bool UPT_GameInstance::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName 
 	}
 
 	return false;
+}
+
+void UPT_GameInstance::Init()
+{
+	GetEngine()->OnNetworkFailure().AddUObject(this, &UPT_GameInstance::HandleNetworkFailure);
 }
 
 void UPT_GameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
@@ -270,5 +276,12 @@ void UPT_GameInstance::DestroySessionAndLeave()
 
 			SessionInterface->DestroySession(GameSessionName);
 		}
+	}
+}
+
+void UPT_GameInstance::HandleNetworkFailure(UWorld* World, UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString)
+{
+	if (FailureType == ENetworkFailure::FailureReceived || FailureType == ENetworkFailure::ConnectionLost) {
+		DestroySessionAndLeave();
 	}
 }

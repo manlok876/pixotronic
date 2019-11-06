@@ -33,6 +33,8 @@ class PIXOTRONIC_API UPT_GameInstance : public UGameInstance
 public:
 	UPT_GameInstance();
 
+	virtual void Init() override;
+
 	TSharedPtr<class FOnlineSessionSettings> SessionSettings;
 
 	// Hosting a session
@@ -89,10 +91,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DestroySessionAndLeave();
-
 private:
 	static const FName ArenaMapName;
 	static const FName StartupMapName;
 
 	EPT_ClientState ClientState;
+
+	void HandleNetworkFailure(UWorld* World, class UNetDriver* NetDriver, ENetworkFailure::Type FailureType, const FString& ErrorString);
 };
