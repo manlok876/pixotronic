@@ -34,7 +34,6 @@ void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), Model.Name);
 	if (IsValid(AbilityComponent))
 	{
-		AbilityComponent->SetIsReplicated(true);
 		AbilityComponent->RegisterComponent();
 	}
 }
