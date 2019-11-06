@@ -4,6 +4,7 @@
 #include "PT_AbilityBike.h"
 
 #include "UnrealNetwork.h"
+#include "Engine/StaticMesh.h"
 #include "Components/StaticMeshComponent.h"
 
 APT_AbilityBike::APT_AbilityBike() : AbilityComponent(nullptr)
@@ -19,10 +20,11 @@ void APT_AbilityBike::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 {
-	if (IsValid(MeshComponent))
+	if (IsValid(MeshComponent) && IsValid(Model.Mesh))
 	{
 		MeshComponent->SetStaticMesh(Model.Mesh);
 	}
+
 	if (IsValid(AbilityComponent))
 	{
 		AbilityComponent->DestroyComponent();
