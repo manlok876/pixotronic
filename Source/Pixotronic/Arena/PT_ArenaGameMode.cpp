@@ -166,7 +166,8 @@ void APT_ArenaGameMode::HandleMatchHasEnded()
 		PlayerState->Score += 1.0;
 	}
 
-	if (ArenaGameState->GetMaxPlayerScore() < ArenaGameState->ScoreToWin)
+	if (ArenaGameState->GetMaxPlayerScore() < ArenaGameState->ScoreToWin && 
+		GetNumPlayers() > 1)
 	{
 		RestartMatch();
 	}
