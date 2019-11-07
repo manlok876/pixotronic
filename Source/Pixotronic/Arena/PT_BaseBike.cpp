@@ -4,6 +4,7 @@
 #include "PT_BaseBike.h"
 
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/Controller.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/InputComponent.h"
@@ -108,6 +109,8 @@ void APT_BaseBike::PossessedBy(AController* NewController)
 	{
 		SetColor(PossessingPlayerState->PlayerColor);
 	}
+
+	SetOwner(NewController);
 }
 
 void APT_BaseBike::UpdateTransform_Implementation(const FTransform& NewTransform)
