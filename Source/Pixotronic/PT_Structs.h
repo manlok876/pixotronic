@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Arena/PT_AbilityInterface.h"
 #include "PT_Structs.generated.h"
 
 USTRUCT(BlueprintType)
@@ -20,7 +21,7 @@ struct FPT_BikeModel
 	UStaticMesh* Mesh;
 
 	/** Class of component responsible for special ability of this bike */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MustImplement="PT_AbilityInterface"))
 	TSubclassOf<UActorComponent> AbilityComponentClass;
 
 	FPT_BikeModel();

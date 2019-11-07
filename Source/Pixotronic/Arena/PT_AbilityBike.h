@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Arena/PT_BaseBike.h"
 #include "PT_Structs.h"
+#include "PT_AbilityInterface.h"
 #include "PT_AbilityBike.generated.h"
 
 /**
@@ -25,7 +26,7 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Replicated)
-	UActorComponent* AbilityComponent;
+	TScriptInterface<IPT_AbilityInterface> AbilityComponent;
 
 private:
 	UFUNCTION(NetMulticast, Reliable)

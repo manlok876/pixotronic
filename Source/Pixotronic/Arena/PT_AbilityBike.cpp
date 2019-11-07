@@ -22,19 +22,20 @@ void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 {
 	ChangeBikeMesh(Model.Mesh);
 
-	if (IsValid(AbilityComponent))
+	if (IsValid(AbilityComponent.GetObject()))
 	{
-		AbilityComponent->DestroyComponent();
+		AbilityComponent = nullptr;
 	}
 
 	if (Model.AbilityComponentClass == nullptr)
 	{
 		return;
 	}
-	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), *Model.Name);
-	if (IsValid(AbilityComponent))
+	UActorComponent* NewAbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), *Model.Name);
+	if (IsValid(NewAbilityComponent))
 	{
-		AbilityComponent->RegisterComponent();
+		NewAbilityComponent->RegisterComponent();
+		AbilityComponent = NewAbilityComponent;
 	}
 }
 
