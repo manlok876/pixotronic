@@ -60,7 +60,7 @@ public:
 	void RegisterPlayerDeath(APlayerController* Player);
 
 	UPROPERTY(Replicated)
-	TSet<APlayerState*> AlivePlayers;
+	TArray<APlayerState*> AlivePlayers;
 
 private:
 	FTimerHandle NextRoundTimer;
