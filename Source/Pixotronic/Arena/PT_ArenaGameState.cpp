@@ -19,6 +19,7 @@ void APT_ArenaGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(APT_ArenaGameState, ScoreToWin);
 	DOREPLIFETIME(APT_ArenaGameState, RoundNumber);
 	DOREPLIFETIME(APT_ArenaGameState, AlivePlayers);
 }

@@ -23,6 +23,8 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	int GetMaxPlayerScore();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Replicated)
+	int ScoreToWin;
 
 	UFUNCTION(NetMulticast, Reliable)
 	void StartMatch();

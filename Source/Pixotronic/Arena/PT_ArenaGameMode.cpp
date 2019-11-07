@@ -41,6 +41,7 @@ void APT_ArenaGameMode::BeginPlay()
 	APT_ArenaGameState* ArenaGameState = GetGameState<APT_ArenaGameState>();
 	check(IsValid(ArenaGameState));
 	ArenaGameState->OnRoundStarted.AddDynamic(this, &APT_ArenaGameMode::RespawnPlayersAndStart);
+	ArenaGameState->ScoreToWin = WinningScore;
 }
 
 AActor* APT_ArenaGameMode::ChoosePlayerStart_Implementation(AController* Player)
@@ -165,7 +166,7 @@ void APT_ArenaGameMode::HandleMatchHasEnded()
 		PlayerState->Score += 1.0;
 	}
 
-	if (ArenaGameState->GetMaxPlayerScore() < WinningScore)
+	if (ArenaGameState->GetMaxPlayerScore() < ArenaGameState->ScoreToWin)
 	{
 		RestartMatch();
 	}
