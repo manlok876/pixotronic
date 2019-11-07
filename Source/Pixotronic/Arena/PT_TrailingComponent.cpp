@@ -39,7 +39,6 @@ UPT_TrailingComponent::UPT_TrailingComponent()
 void UPT_TrailingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	SetColor(Color);
 	TurnOn();
 	// Maybe use native delegate?
 	//GetOwner()->GetRootComponent()->TransformUpdated.AddUObject(this, &UPT_TrailingComponent::OnTransformUpdated);
