@@ -36,6 +36,9 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void SetColor(const FLinearColor& NewColor);
 
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	void SetTurningEnabled(bool Enable);
+
 	UFUNCTION(Server, Reliable, WithValidation)
 	void TurnLeft();
 
@@ -81,4 +84,7 @@ protected:
 
 	UPROPERTY(Replicated)
 	bool IsDead;
+
+	UPROPERTY(Replicated)
+	bool IsInputEnabled;
 };

@@ -77,6 +77,7 @@ APT_BaseBike::APT_BaseBike()
 
 	Speed = 500;
 	IsDead = false;
+	IsInputEnabled = true;
 }
 
 void APT_BaseBike::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -84,6 +85,7 @@ void APT_BaseBike::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(APT_BaseBike, IsDead);
+	DOREPLIFETIME(APT_BaseBike, IsInputEnabled);
 }
 
 void APT_BaseBike::OnConstruction(const FTransform& Transform)
@@ -170,6 +172,17 @@ void APT_BaseBike::HandleTouchInput(ETouchIndex::Type FingerIndex, FVector Locat
 	}
 }
 
+void APT_BaseBike::SetTurningEnabled_Implementation(bool Enable)
+{
+	UpdateTransform(GetActorTransform());
+	IsInputEnabled = Enable;
+}
+
+bool APT_BaseBike::SetTurningEnabled_Validate(bool Enable)
+{
+	return !IsDead;
+}
+
 void APT_BaseBike::TurnLeft_Implementation()
 {
 	if (HasAuthority())
@@ -185,7 +198,7 @@ void APT_BaseBike::TurnLeft_Implementation()
 
 bool APT_BaseBike::TurnLeft_Validate()
 {
-	return !IsDead;
+	return IsInputEnabled;
 }
 
 void APT_BaseBike::TurnRight_Implementation()
@@ -203,7 +216,7 @@ void APT_BaseBike::TurnRight_Implementation()
 
 bool APT_BaseBike::TurnRight_Validate()
 {
-	return !IsDead;
+	return IsInputEnabled;
 }
 
 void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedComponent,
@@ -214,6 +227,7 @@ void APT_BaseBike::OnCollide_Implementation(UPrimitiveComponent* OverlappedCompo
 	if (HasAuthority())
 	{
 		IsDead = true;
+		SetTurningEnabled(false);
 		if (IsValid(CollisionBox))
 		{
 			CollisionBox->OnComponentBeginOverlap.RemoveAll(this);
