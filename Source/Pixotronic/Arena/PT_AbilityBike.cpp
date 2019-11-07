@@ -18,11 +18,16 @@ void APT_AbilityBike::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(APT_AbilityBike, AbilityComponent);
 }
 
+TScriptInterface<IPT_AbilityInterface> APT_AbilityBike::GetAbilityComponent() const
+{
+	return TScriptInterface<IPT_AbilityInterface>(AbilityComponent);
+}
+
 void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 {
 	ChangeBikeMesh(Model.Mesh);
 
-	if (IsValid(AbilityComponent.GetObject()))
+	if (IsValid(AbilityComponent))
 	{
 		AbilityComponent = nullptr;
 	}
@@ -31,11 +36,10 @@ void APT_AbilityBike::ApplyBikeModel_Implementation(const FPT_BikeModel& Model)
 	{
 		return;
 	}
-	UActorComponent* NewAbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), *Model.Name);
-	if (IsValid(NewAbilityComponent))
+	AbilityComponent = NewObject<UActorComponent>(this, Model.AbilityComponentClass.Get(), *Model.Name);
+	if (IsValid(AbilityComponent))
 	{
-		NewAbilityComponent->RegisterComponent();
-		AbilityComponent = NewAbilityComponent;
+		AbilityComponent->RegisterComponent();
 	}
 }
 

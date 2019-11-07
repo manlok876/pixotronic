@@ -25,10 +25,13 @@ public:
 	void ApplyBikeModel(const FPT_BikeModel& Model);
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Replicated)
-	TScriptInterface<IPT_AbilityInterface> AbilityComponent;
+	UFUNCTION(BlueprintPure)
+	TScriptInterface<IPT_AbilityInterface> GetAbilityComponent() const;
 
 private:
 	UFUNCTION(NetMulticast, Reliable)
 	void ChangeBikeMesh(class UStaticMesh* NewMesh);
+
+	UPROPERTY(Replicated)
+	UActorComponent* AbilityComponent;
 };
