@@ -25,7 +25,7 @@ APT_ArenaGameMode::APT_ArenaGameMode()
 	GameStateClass = APT_ArenaGameState::StaticClass();
 	
 	bDelayedStart = true;
-	SetMaxPlayers(2);
+	SetMaxPlayers(4);
 	WinningScore = 5;
 	WaitingRoundStart = false;
 
